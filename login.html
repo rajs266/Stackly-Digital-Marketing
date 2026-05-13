@@ -22,13 +22,13 @@ body{
 }
 .split{display:flex;width:100%;min-height:100vh;}
 
-/* ── LEFT PANEL ── */
+
 .left-panel{
   flex:1;display:flex;align-items:center;justify-content:center;
   padding:60px 48px;position:relative;overflow:hidden;
 }
 
-/* Background image */
+
 .left-bg-img{
   position:absolute;inset:0;z-index:0;
   background:url('./assets/Meeting.webp') center/cover no-repeat;
@@ -52,7 +52,7 @@ body{
 .b2{width:260px;height:260px;background:rgba(42,63,95,0.35);bottom:60px;left:-60px;animation-delay:3s;}
 @keyframes drift{from{transform:translateY(0)}to{transform:translateY(28px)}}
 
-/* Particles */
+
 .particle{position:absolute;border-radius:50%;z-index:3;animation:particleFloat linear infinite;pointer-events:none;}
 .pt1{width:4px;height:4px;background:var(--gold);top:20%;left:15%;opacity:.5;animation-duration:14s;}
 .pt2{width:3px;height:3px;background:var(--gold-light);top:65%;left:10%;opacity:.4;animation-duration:18s;animation-delay:-5s;}
@@ -70,7 +70,7 @@ body{
 .left-content h2 em{color:var(--gold);font-style:normal;}
 .left-content>p{color:var(--smoke);font-size:15px;line-height:1.75;margin-bottom:44px;}
 
-/* Animated rings */
+
 .rings{position:relative;width:220px;height:220px;margin:0 auto 36px;}
 .ring{
   position:absolute;border-radius:50%;
@@ -110,7 +110,7 @@ body{
 }
 .pill:hover{background:rgba(240,165,0,0.18);transform:translateY(-2px);}
 
-/* ── RIGHT PANEL ── */
+
 .right-panel{
   width:500px;min-width:0;display:flex;align-items:center;justify-content:center;
   padding:48px 44px;
@@ -127,7 +127,7 @@ body{
 }
 .form-header p{color:var(--smoke);font-size:14px;}
 
-/* Social */
+
 .social-btns{display:flex;gap:10px;margin-bottom:18px;}
 .social-btn{
   flex:1;padding:10px;display:flex;align-items:center;justify-content:center;gap:8px;
@@ -139,7 +139,7 @@ body{
 .divider{display:flex;align-items:center;gap:12px;margin:18px 0;color:var(--smoke);font-size:12px;}
 .divider::before,.divider::after{content:'';flex:1;height:1px;background:var(--border);}
 
-/* Form */
+
 .form-group{margin-bottom:18px;position:relative;}
 .form-group label{
   display:block;font-size:11px;font-weight:700;letter-spacing:.07em;
@@ -202,7 +202,7 @@ body{
 .error-msg.show{display:block;}
 .field-error input,.field-error select{border-color:var(--error)!important;}
 
-/* Not registered banner */
+
 .alert-banner{
   display:none;
   margin-bottom:18px;
@@ -219,7 +219,7 @@ body{
 .alert-desc a:hover{text-decoration:underline;}
 @keyframes fadeSlide{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
 
-/* ── RESPONSIVE ── */
+
 @media(max-width:900px){
   .left-panel{display:none;}
   .right-panel{width:100%;border-left:none;padding:40px 28px;}
@@ -282,7 +282,7 @@ body{
       <div class="divider">or continue with email</div>
 
       <div id="loginForm">
-        <!-- Not registered alert -->
+        
         <div class="alert-banner" id="alert-not-registered">
           <div class="alert-icon">⚠️</div>
           <div class="alert-body">
@@ -294,7 +294,7 @@ body{
           </div>
         </div>
 
-        <!-- Wrong password alert -->
+        
         <div class="alert-banner" id="alert-wrong-password">
           <div class="alert-icon">🔒</div>
           <div class="alert-body">

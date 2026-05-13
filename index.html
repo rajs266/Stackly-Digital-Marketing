@@ -18,7 +18,7 @@
 html{scroll-behavior:smooth;}
 body{font-family:'Outfit',sans-serif;background:var(--ink);color:var(--white);overflow-x:hidden;}
 
-/* ── NAV ── */
+
 nav{
   position:fixed;top:0;left:0;right:0;z-index:200;
   display:flex;align-items:center;justify-content:space-between;
@@ -47,7 +47,7 @@ nav.scrolled{background:rgba(10,14,26,0.97);padding:14px 48px;}
 }
 .btn-getstarted:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(240,165,0,0.45);}
 
-/* ── HERO ── */
+
 .hero{
   min-height:100vh;display:flex;align-items:center;justify-content:center;
   position:relative;overflow:hidden;padding:120px 24px 80px;
@@ -131,7 +131,7 @@ nav.scrolled{background:rgba(10,14,26,0.97);padding:14px 48px;}
 }
 .cta-secondary:hover{border-color:var(--gold);color:var(--gold);}
 
-/* trust bar */
+
 .trust-bar{
   display:flex;align-items:center;gap:20px;justify-content:center;flex-wrap:wrap;
   animation:fadeUp .8s .4s ease both;
@@ -154,7 +154,7 @@ nav.scrolled{background:rgba(10,14,26,0.97);padding:14px 48px;}
 
 @keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:none}}
 
-/* ── FEATURES STRIP ── */
+
 .features-strip{
   background:var(--ink-mid);
   padding:80px 24px;
@@ -192,7 +192,7 @@ nav.scrolled{background:rgba(10,14,26,0.97);padding:14px 48px;}
 .feat-card h3{font-family:'Playfair Display',serif;font-size:1.15rem;font-weight:700;margin-bottom:10px;}
 .feat-card p{font-size:14px;color:var(--smoke);line-height:1.7;}
 
-/* ── PRICING ── */
+
 .pricing{
   padding:80px 24px;
   background:var(--ink);
@@ -250,7 +250,7 @@ nav.scrolled{background:rgba(10,14,26,0.97);padding:14px 48px;}
 .pbtn-filled{background:linear-gradient(135deg,var(--gold),var(--gold-dark));color:var(--ink);}
 .pbtn-filled:hover{box-shadow:0 10px 32px rgba(240,165,0,.4);transform:translateY(-2px);}
 
-/* ── CTA BAND ── */
+
 .cta-band{
   background:linear-gradient(135deg,var(--ink-light),var(--slate));
   padding:80px 24px;text-align:center;position:relative;overflow:hidden;
@@ -278,7 +278,7 @@ nav.scrolled{background:rgba(10,14,26,0.97);padding:14px 48px;}
 }
 .cta-a-secondary:hover{border-color:var(--gold);color:var(--gold);}
 
-/* ── FOOTER ── */
+
 footer{
   background:var(--ink);border-top:1px solid rgba(255,255,255,0.06);
   padding:40px 24px;text-align:center;
@@ -289,11 +289,11 @@ footer{
 .footer-links a:hover{color:var(--gold);}
 .footer-copy{font-size:12px;color:rgba(139,163,199,.4);}
 
-/* ── REVEAL ── */
+
 .reveal{opacity:0;transform:translateY(22px);transition:opacity .7s ease,transform .7s ease;}
 .reveal.visible{opacity:1;transform:none;}
 
-/* ── RESPONSIVE ── */
+
 @media(max-width:900px){
   nav{padding:14px 20px;}
   nav.scrolled{padding:12px 20px;}
@@ -314,7 +314,7 @@ body,html{overflow-x:hidden;width:100%;position:relative;}
 img,video,iframe{max-width:100%;height:auto;}
 .container,.hero-inner,.features-grid,.pricing-grid{max-width:100%;}
 
-/* Desktop: Make float cards visible around mockup */
+
 @media(min-width:901px){
   .hero-visual{position:relative;}
   .float-card{
@@ -333,7 +333,7 @@ img,video,iframe{max-width:100%;height:auto;}
   @keyframes floatCard3{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
 }
 
-/* Tablet */
+
 @media(max-width:900px){
   .hero-inner{flex-direction:column;gap:50px;}
   .hero-visual{width:100%;max-width:600px;margin:0 auto;position:relative;}
@@ -343,7 +343,7 @@ img,video,iframe{max-width:100%;height:auto;}
   .fc3{bottom:0;left:50%;transform:translateX(-50%);}
 }
 
-/* Mobile: Cards in attractive grid below mockup */
+
 @media(max-width:600px){
   *{box-sizing:border-box;}
   body{overflow-x:hidden !important;}
@@ -393,7 +393,7 @@ img,video,iframe{max-width:100%;height:auto;}
   .footer-links{flex-direction:column;align-items:center;gap:16px;}
   .footer-links a{font-size:15px;}
   
-  /* Prevent any element from causing overflow */
+  
   section{max-width:100vw;}
 }
 @media(max-width:380px){

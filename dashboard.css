@@ -258,14 +258,14 @@ tr:hover td{background:rgba(240,165,0,0.03);}
   .sidebar-overlay.open{display:block;}
   .main{margin-left:0;padding:20px 16px;}
 
-  /* Topnav: single clean row */
+  
   .topnav{
     padding:0 12px;
     flex-wrap:nowrap;
     gap:8px;
   }
 
-  /* Left: Logo + Welcome Name, takes remaining space */
+  
   .topnav-left{
     width:auto;
     flex:1;
@@ -301,7 +301,7 @@ tr:hover td{background:rgba(240,165,0,0.03);}
     max-width:130px;
   }
 
-  /* Right: Logout + Burger only */
+  
   .topnav-right{
     flex:0 0 auto;
     gap:8px;
