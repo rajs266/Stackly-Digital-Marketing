@@ -202,6 +202,23 @@ body{
 .error-msg.show{display:block;}
 .field-error input,.field-error select{border-color:var(--error)!important;}
 
+/* Not registered banner */
+.alert-banner{
+  display:none;
+  margin-bottom:18px;
+  padding:14px 16px;
+  border-radius:10px;
+  border:1.5px solid rgba(255,92,92,0.35);
+  background:rgba(255,92,92,0.07);
+}
+.alert-banner.show{display:flex;align-items:flex-start;gap:12px;animation:fadeSlide .35s ease both;}
+.alert-icon{font-size:18px;flex-shrink:0;margin-top:1px;}
+.alert-title{font-size:13px;font-weight:700;color:#FF5C5C;margin-bottom:3px;}
+.alert-desc{font-size:12px;color:var(--smoke);line-height:1.6;}
+.alert-desc a{color:var(--gold);font-weight:600;text-decoration:none;}
+.alert-desc a:hover{text-decoration:underline;}
+@keyframes fadeSlide{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
+
 /* ── RESPONSIVE ── */
 @media(max-width:900px){
   .left-panel{display:none;}
@@ -265,6 +282,29 @@ body{
       <div class="divider">or continue with email</div>
 
       <div id="loginForm">
+        <!-- Not registered alert -->
+        <div class="alert-banner" id="alert-not-registered">
+          <div class="alert-icon">⚠️</div>
+          <div class="alert-body">
+            <div class="alert-title">Account not found</div>
+            <div class="alert-desc">
+              No account is registered with this email address.<br>
+              <a href="signup.html">Create a free account →</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Wrong password alert -->
+        <div class="alert-banner" id="alert-wrong-password">
+          <div class="alert-icon">🔒</div>
+          <div class="alert-body">
+            <div class="alert-title">Incorrect password</div>
+            <div class="alert-desc">
+              The password you entered doesn't match our records.<br>
+              <a href="404.html">Forgot your password?</a>
+            </div>
+          </div>
+        </div>
         <div class="form-group" id="grp-role">
           <label>Role</label>
           <select id="role">
@@ -315,28 +355,69 @@ function togglePw(id,btn){
   if(inp.type==='password'){inp.type='text';btn.textContent='🙈';}
   else{inp.type='password';btn.textContent='👁';}
 }
+function hideAlerts(){
+  document.getElementById('alert-not-registered').classList.remove('show');
+  document.getElementById('alert-wrong-password').classList.remove('show');
+}
 function handleLogin(){
   let valid=true;
   const role=document.getElementById('role').value;
   const email=document.getElementById('email').value.trim();
   const password=document.getElementById('password').value;
+
+  // Clear all errors
+  hideAlerts();
   ['role','email','password'].forEach(f=>{
     document.getElementById('grp-'+f).classList.remove('field-error');
     document.getElementById('err-'+f).classList.remove('show');
   });
-  if(!role){document.getElementById('grp-role').classList.add('field-error');document.getElementById('err-role').classList.add('show');valid=false;}
-  if(!email||!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){document.getElementById('grp-email').classList.add('field-error');document.getElementById('err-email').classList.add('show');valid=false;}
-  if(password.length<6){document.getElementById('grp-password').classList.add('field-error');document.getElementById('err-password').classList.add('show');valid=false;}
-  if(!valid)return;
-  const users=JSON.parse(localStorage.getItem('stackly_users')||'[]');
-  const user=users.find(u=>u.email===email&&u.password===password&&u.role===role);
-  if(!user){
+
+  // Field validations
+  if(!role){
+    document.getElementById('grp-role').classList.add('field-error');
+    document.getElementById('err-role').classList.add('show');
+    valid=false;
+  }
+  if(!email||!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){
     document.getElementById('grp-email').classList.add('field-error');
-    document.getElementById('err-email').textContent='Invalid credentials or role mismatch.';
     document.getElementById('err-email').classList.add('show');
+    valid=false;
+  }
+  if(password.length<6){
+    document.getElementById('grp-password').classList.add('field-error');
+    document.getElementById('err-password').classList.add('show');
+    valid=false;
+  }
+  if(!valid) return;
+
+  const users=JSON.parse(localStorage.getItem('stackly_users')||'[]');
+
+  // Check if email is registered at all
+  const emailExists = users.find(u => u.email === email);
+  if(!emailExists){
+    document.getElementById('grp-email').classList.add('field-error');
+    document.getElementById('alert-not-registered').classList.add('show');
     return;
   }
-  localStorage.setItem('stackly_session',JSON.stringify({name:user.name,email:user.email,role:user.role}));
+
+  // Check if password matches
+  const userWithPassword = users.find(u => u.email === email && u.password === password);
+  if(!userWithPassword){
+    document.getElementById('grp-password').classList.add('field-error');
+    document.getElementById('alert-wrong-password').classList.add('show');
+    return;
+  }
+
+  // Check role mismatch
+  if(userWithPassword.role !== role){
+    document.getElementById('grp-role').classList.add('field-error');
+    document.getElementById('err-role').textContent = 'This account is registered under a different role.';
+    document.getElementById('err-role').classList.add('show');
+    return;
+  }
+
+  // Success
+  localStorage.setItem('stackly_session', JSON.stringify({name:userWithPassword.name, email:userWithPassword.email, role:userWithPassword.role}));
   if(role==='admin') window.location.href='dashboard-admin.html';
   else window.location.href='dashboard-client.html';
 }
