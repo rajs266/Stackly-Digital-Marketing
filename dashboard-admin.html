@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Admin Dashboard – Stackly</title>
+<link rel="stylesheet" href="dashboard.css"/>
+<base target="_blank">
+<base target="_blank">
+</head>
+<body>
+
+
+<nav class="topnav">
+  <div class="topnav-left">
+    <a href="index.html"><img src="./assets/logo.webp" alt="Stackly"/></a>
+    <div style="display:flex;flex-direction:column;margin-left:32px;line-height:1.1">
+      <span style="font-size:12px;color:var(--smoke)">Welcome,</span>
+      <strong id="nav-name" style="font-size:15px">Admin</strong>
+    </div>
+  </div>
+  <div class="topnav-right">
+    <span class="nav-user-email" id="nav-email"></span>
+    <button class="btn-logout" onclick="logout()">Logout</button>
+    <button class="burger" onclick="toggleSidebar()" aria-label="Menu">☰</button>
+  </div>
+</nav>
+
+<div class="sidebar-overlay" id="overlay" onclick="toggleSidebar()"></div>
+
+
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-role-block">
+    <div class="sidebar-role-badge"><div class="role-dot"></div> Admin Account</div>
+  </div>
+
+  <div class="sidebar-nav">
+    <div class="sidebar-section">
+      <div class="sidebar-label">Dashboard</div>
+      <a class="sidebar-item active" href="dashboard-admin.html"><span class="s-icon">🏠</span> Overview</a>
+      <a class="sidebar-item" href="404.html"><span class="s-icon">📊</span> Analytics</a>
+      <a class="sidebar-item" href="404.html"><span class="s-icon">🚀</span> Campaigns</a>
+      <a class="sidebar-item" href="404.html"><span class="s-icon">👥</span> Clients</a>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-label">Management</div>
+      <a class="sidebar-item" href="404.html"><span class="s-icon">📋</span> Reports</a>
+      <a class="sidebar-item" href="404.html"><span class="s-icon">💰</span> Billing</a>
+      <a class="sidebar-item" href="404.html"><span class="s-icon">🎯</span> Ad Manager</a>
+      <a class="sidebar-item" href="404.html"><span class="s-icon">🔔</span> Notifications</a>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-label">Settings</div>
+      <a class="sidebar-item" href="404.html"><span class="s-icon">👤</span> Profile</a>
+      <a class="sidebar-item" href="404.html"><span class="s-icon">⚙️</span> Settings</a>
+      <a class="sidebar-item" href="404.html"><span class="s-icon">🔐</span> Team Access</a>
+      <a class="sidebar-item" href="404.html"><span class="s-icon">🆘</span> Support</a>
+    </div>
+  </div>
+</aside>
+
+
+<div class="dash-layout">
+  <main class="main">
+    <div class="page-header-row">
+      <div class="page-header">
+        <div class="page-title">Admin Dashboard</div>
+        <div class="page-sub">Manage all campaigns, clients and platform operations.</div>
+      </div>
+      <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
+        <a href="404.html" class="action-btn action-btn-outline">Export Data</a>
+        <a href="404.html" class="action-btn action-btn-primary">+ New Campaign</a>
+      </div>
+    </div>
+
+    
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-icon-wrap">👥</div>
+        <div class="stat-label">Total Clients</div>
+        <div class="stat-val">48</div>
+        <div class="stat-change up">↑ 5 new</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon-wrap">🚀</div>
+        <div class="stat-label">Active Campaigns</div>
+        <div class="stat-val">127</div>
+        <div class="stat-change up">↑ 12%</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon-wrap">👁</div>
+        <div class="stat-label">Total Impressions</div>
+        <div class="stat-val">2.4M</div>
+        <div class="stat-change up">↑ 28%</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon-wrap">💰</div>
+        <div class="stat-label">Revenue</div>
+        <div class="stat-val">₹12.5L</div>
+        <div class="stat-change up">↑ 18%</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon-wrap">📈</div>
+        <div class="stat-label">Avg. CTR</div>
+        <div class="stat-val">4.2%</div>
+        <div class="stat-change up">↑ 0.3%</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon-wrap">🏆</div>
+        <div class="stat-label">Conversions</div>
+        <div class="stat-val">3,842</div>
+        <div class="stat-change up">↑ 15%</div>
+      </div>
+    </div>
+
+    
+    <div style="display:grid;grid-template-columns:1fr 1.6fr;gap:18px;margin-bottom:18px;">
+      <div class="card">
+        <div class="card-title">Weekly Performance</div>
+        <div class="bar-chart">
+          <div class="bar" style="height:45%"></div>
+          <div class="bar" style="height:65%"></div>
+          <div class="bar" style="height:52%"></div>
+          <div class="bar hi" style="height:95%"></div>
+          <div class="bar" style="height:70%"></div>
+          <div class="bar" style="height:85%"></div>
+          <div class="bar" style="height:78%"></div>
+        </div>
+        <div class="bar-labels">
+          <span class="bar-label">Mon</span><span class="bar-label">Tue</span>
+          <span class="bar-label">Wed</span><span class="bar-label">Thu</span>
+          <span class="bar-label">Fri</span><span class="bar-label">Sat</span>
+          <span class="bar-label">Sun</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Recent Campaigns <a href="404.html" class="card-title-action">View All →</a></div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Campaign</th><th>Client</th><th>Budget</th><th>Status</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Summer Sale 2025</strong></td><td style="color:var(--smoke);">Acme Corp</td><td>₹80,000</td><td><span class="badge badge-green">Live</span></td></tr>
+              <tr><td><strong>Brand Awareness</strong></td><td style="color:var(--smoke);">TechStart</td><td>₹40,000</td><td><span class="badge badge-yellow">Paused</span></td></tr>
+              <tr><td><strong>Product Launch</strong></td><td style="color:var(--smoke);">Nexus Inc</td><td>₹1,20,000</td><td><span class="badge badge-green">Live</span></td></tr>
+              <tr><td><strong>Holiday Special</strong></td><td style="color:var(--smoke);">ShopMart</td><td>₹60,000</td><td><span class="badge badge-blue">Scheduled</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    
+    <div style="display:grid;grid-template-columns:1.4fr 1fr;gap:18px;margin-bottom:18px;">
+      <div class="card">
+        <div class="card-title">Top Clients <a href="404.html" class="card-title-action">View All →</a></div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Client</th><th>Campaigns</th><th>Spend</th><th>Status</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Acme Corp</strong></td><td style="color:var(--smoke);">8</td><td>₹4.2L</td><td><span class="badge badge-green">Active</span></td></tr>
+              <tr><td><strong>TechStart</strong></td><td style="color:var(--smoke);">5</td><td>₹2.8L</td><td><span class="badge badge-green">Active</span></td></tr>
+              <tr><td><strong>Nexus Inc</strong></td><td style="color:var(--smoke);">3</td><td>₹1.5L</td><td><span class="badge badge-yellow">Pending</span></td></tr>
+              <tr><td><strong>ShopMart</strong></td><td style="color:var(--smoke);">6</td><td>₹3.1L</td><td><span class="badge badge-green">Active</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Revenue Breakdown</div>
+        <div style="margin-bottom:16px;">
+          <div style="text-align:center;padding:8px 0;">
+            <div style="font-family:'Playfair Display',serif;font-size:2.2rem;font-weight:900;color:var(--gold);">₹12.5L</div>
+            <div style="font-size:12px;color:var(--smoke);margin-top:3px;">Total Revenue This Month</div>
+          </div>
+        </div>
+        <div style="border-top:1px solid var(--border);padding-top:12px;">
+          <div class="progress-row" style="margin-bottom:9px;">
+            <div class="progress-label">Google Ads</div>
+            <div class="progress-bar"><div class="progress-fill" style="width:55%"></div></div>
+            <div class="progress-val">55%</div>
+          </div>
+          <div class="progress-row" style="margin-bottom:9px;">
+            <div class="progress-label">Meta Ads</div>
+            <div class="progress-bar"><div class="progress-fill" style="width:30%"></div></div>
+            <div class="progress-val">30%</div>
+          </div>
+          <div class="progress-row" style="margin-bottom:0;">
+            <div class="progress-label">Email</div>
+            <div class="progress-bar"><div class="progress-fill" style="width:15%"></div></div>
+            <div class="progress-val">15%</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    
+    <div class="card">
+      <div class="card-title">Platform Activity <a href="404.html" class="card-title-action">View All →</a></div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Activity</th><th>User/Client</th><th>Date</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr><td>New campaign created</td><td style="color:var(--smoke);">Acme Corp</td><td style="color:var(--smoke);">May 12, 2025</td><td><span class="badge badge-green">Done</span></td></tr>
+            <tr><td>Client onboarded</td><td style="color:var(--smoke);">Nexus Inc</td><td style="color:var(--smoke);">May 11, 2025</td><td><span class="badge badge-blue">Processed</span></td></tr>
+            <tr><td>Budget increased</td><td style="color:var(--smoke);">TechStart</td><td style="color:var(--smoke);">May 10, 2025</td><td><span class="badge badge-yellow">Running</span></td></tr>
+            <tr><td>Report generated</td><td style="color:var(--smoke);">All Clients</td><td style="color:var(--smoke);">May 9, 2025</td><td><span class="badge badge-blue">Ready</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+</div>
+
+<style>
+@media(max-width:900px){
+  .main [style*="grid-template-columns:1fr 1.6fr"],
+  .main [style*="grid-template-columns:1.4fr 1fr"]{
+    display:block!important;
+  }
+  .main [style*="grid-template-columns:1fr 1.6fr"]>.card,
+  .main [style*="grid-template-columns:1.4fr 1fr"]>.card{
+    margin-bottom:18px;
+  }
+}
+  .bar-chart{height:220px!important;display:flex;align-items:flex-end;gap:12px;padding:10px 5px 0}
+  .bar-chart .bar{flex:1;min-width:22px;border-radius:6px 6px 0 0}
+  /* Admin uses same gold accent as client */
+</style>
+
+<script>
+(function(){
+  const s=JSON.parse(localStorage.getItem('stackly_session')||'null');
+  if(!s||s.role!=='admin'){window.location.href='login.html';return;}
+  document.getElementById('nav-email').textContent=s.email||'';
+  if(s.name){
+    document.getElementById('nav-name').textContent=s.name;
+  }
+})();
+function logout(){localStorage.removeItem('stackly_session');window.location.href='index.html';}
+function toggleSidebar(){
+  document.getElementById('sidebar').classList.toggle('open');
+  document.getElementById('overlay').classList.toggle('open');
+}
+window.addEventListener('load',()=>{
+  document.querySelectorAll('.progress-fill').forEach(b=>{
+    const w=b.style.width;b.style.width='0';setTimeout(()=>{b.style.width=w;},400);
+  });
+});
+</script>
+</body>
+</html>

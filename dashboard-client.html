@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>My Dashboard – Stackly</title>
+<link rel="stylesheet" href="dashboard.css"/>
+<base target="_blank">
+</head>
+<body>
+
+
+<nav class="topnav">
+  <div class="topnav-left">
+    <a href="index.html"><img src="./assets/logo.webp" alt="Stackly"/></a>
+    <div style="display:flex;flex-direction:column;margin-left:32px;line-height:1.1">
+      <span style="font-size:12px;color:var(--smoke)">Welcome,</span>
+      <strong id="nav-welcome" style="font-size:15px">User</strong>
+    </div>
+  </div>
+  <div class="topnav-right">
+    <span class="nav-user-email" id="nav-email"></span>
+    <button class="btn-logout" onclick="logout()">Logout</button>
+    <button class="burger" onclick="toggleSidebar()" aria-label="Menu">☰</button>
+  </div>
+</nav>
+
+<div class="sidebar-overlay" id="overlay" onclick="toggleSidebar()"></div>
+
+
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-role-block">
+    <div class="sidebar-role-badge"><div class="role-dot"></div> Client Account</div>
+  </div>
+
+  <div class="sidebar-nav">
+    <div class="sidebar-section">
+      <div class="sidebar-label">My Account</div>
+      <a class="sidebar-item active" href="dashboard-client.html"><span class="s-icon">🏠</span> Overview</a>
+      <a class="sidebar-item" href="404.html"><span class="s-icon">📊</span> My Analytics</a>
+      <a class="sidebar-item" href="404.html"><span class="s-icon">🚀</span> My Campaigns</a>
+      <a class="sidebar-item" href="404.html"><span class="s-icon">📄</span> Reports</a>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-label">Tools</div>
+      <a class="sidebar-item" href="404.html"><span class="s-icon">🎯</span> Ad Preview</a>
+      <a class="sidebar-item" href="404.html"><span class="s-icon">📸</span> Creative Assets</a>
+      <a class="sidebar-item" href="404.html"><span class="s-icon">🔔</span> Notifications</a>
+      <a class="sidebar-item" href="404.html"><span class="s-icon">📩</span> Messages</a>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-label">Account</div>
+      <a class="sidebar-item" href="404.html"><span class="s-icon">👤</span> Profile</a>
+      <a class="sidebar-item" href="404.html"><span class="s-icon">⚙️</span> Settings</a>
+      <a class="sidebar-item" href="404.html"><span class="s-icon">💳</span> Billing</a>
+      <a class="sidebar-item" href="404.html"><span class="s-icon">🆘</span> Support</a>
+    </div>
+  </div>
+</aside>
+
+
+<div class="dash-layout">
+  <main class="main">
+    <div class="page-header-row">
+      <div class="page-header">
+        <div class="page-title">My Dashboard</div>
+        <div class="page-sub">Track your campaigns and marketing performance.</div>
+      </div>
+      <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
+        <a href="404.html" class="action-btn action-btn-outline">Download Report</a>
+        <a href="404.html" class="action-btn action-btn-primary">Request Campaign</a>
+      </div>
+    </div>
+
+    
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-icon-wrap">🚀</div>
+        <div class="stat-label">Active Campaigns</div>
+        <div class="stat-val">3</div>
+        <div class="stat-change up">↑ 1 new</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon-wrap">👁</div>
+        <div class="stat-label">Total Impressions</div>
+        <div class="stat-val">184K</div>
+        <div class="stat-change up">↑ 22%</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon-wrap">🖱</div>
+        <div class="stat-label">Total Clicks</div>
+        <div class="stat-val">6,420</div>
+        <div class="stat-change up">↑ 14%</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon-wrap">📈</div>
+        <div class="stat-label">CTR</div>
+        <div class="stat-val">3.5%</div>
+        <div class="stat-change down">↓ 0.1%</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon-wrap">💰</div>
+        <div class="stat-label">Budget Used</div>
+        <div class="stat-val">₹68K</div>
+        <div class="stat-change" style="color:var(--smoke);">of ₹1,20,000</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon-wrap">🏆</div>
+        <div class="stat-label">Conversions</div>
+        <div class="stat-val">312</div>
+        <div class="stat-change up">↑ 8%</div>
+      </div>
+    </div>
+
+    
+    <div style="display:grid;grid-template-columns:1fr 1.6fr;gap:18px;margin-bottom:18px;">
+      <div class="card">
+        <div class="card-title">Weekly Clicks</div>
+        <div class="bar-chart">
+          <div class="bar" style="height:35%"></div>
+          <div class="bar" style="height:55%"></div>
+          <div class="bar" style="height:42%"></div>
+          <div class="bar hi" style="height:95%"></div>
+          <div class="bar" style="height:60%"></div>
+          <div class="bar" style="height:78%"></div>
+          <div class="bar" style="height:70%"></div>
+        </div>
+        <div class="bar-labels">
+          <span class="bar-label">Mon</span><span class="bar-label">Tue</span>
+          <span class="bar-label">Wed</span><span class="bar-label">Thu</span>
+          <span class="bar-label">Fri</span><span class="bar-label">Sat</span>
+          <span class="bar-label">Sun</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">My Campaigns <a href="404.html" class="card-title-action">View All →</a></div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Campaign</th><th>Platform</th><th>Budget</th><th>Status</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Summer Sale 2025</strong></td><td style="color:var(--smoke);">Google Ads</td><td>₹80,000</td><td><span class="badge badge-green">Live</span></td></tr>
+              <tr><td><strong>Brand Awareness</strong></td><td style="color:var(--smoke);">Instagram</td><td>₹40,000</td><td><span class="badge badge-yellow">Paused</span></td></tr>
+              <tr><td><strong>Email Newsletter</strong></td><td style="color:var(--smoke);">Mailchimp</td><td>₹8,000</td><td><span class="badge badge-green">Live</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    
+    <div style="display:grid;grid-template-columns:1.4fr 1fr;gap:18px;margin-bottom:18px;">
+      <div class="card" style="padding:0;overflow:hidden;position:relative;background:url('./assets/client.webp') center/cover no-repeat;">
+        <div style="position:absolute;inset:0;background:rgba(0,0,0,0.6);"></div>
+        <div style="position:relative;z-index:2;padding:22px;display:flex;flex-direction:column;justify-content:flex-end;height:100%;min-height:200px;">
+          <div style="font-size:10px;font-weight:700;color:var(--gold);letter-spacing:.08em;text-transform:uppercase;margin-bottom:5px;">Campaign Tip</div>
+          <div style="font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:800;margin-bottom:7px;">Your Summer Sale campaign is outperforming benchmarks by 38%.</div>
+          <a href="404.html" style="color:var(--gold);font-size:13px;font-weight:600;text-decoration:none;">View Details →</a>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Budget Utilisation</div>
+        <div style="margin-bottom:16px;">
+          <div style="text-align:center;padding:8px 0;">
+            <div style="font-family:'Playfair Display',serif;font-size:2.2rem;font-weight:900;color:var(--gold);">57%</div>
+            <div style="font-size:12px;color:var(--smoke);margin-top:3px;">of ₹1,20,000 used</div>
+          </div>
+          <div style="height:8px;background:rgba(255,255,255,0.08);border-radius:999px;overflow:hidden;margin:12px 0;">
+            <div style="height:100%;width:57%;background:linear-gradient(90deg,var(--gold-dark),var(--gold));border-radius:999px;transition:width 1.2s ease;" class="budget-bar"></div>
+          </div>
+          <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--smoke);">
+            <span>₹0</span><span style="color:var(--white);font-weight:600;">₹68K spent</span><span>₹1.2L</span>
+          </div>
+        </div>
+        <div style="border-top:1px solid var(--border);padding-top:12px;">
+          <div class="progress-row" style="margin-bottom:9px;">
+            <div class="progress-label">Google Ads</div>
+            <div class="progress-bar"><div class="progress-fill" style="width:70%"></div></div>
+            <div class="progress-val">70%</div>
+          </div>
+          <div class="progress-row" style="margin-bottom:0;">
+            <div class="progress-label">Instagram</div>
+            <div class="progress-bar"><div class="progress-fill" style="width:45%"></div></div>
+            <div class="progress-val">45%</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    
+    <div class="card">
+      <div class="card-title">Recent Activity <a href="404.html" class="card-title-action">View All →</a></div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Activity</th><th>Campaign</th><th>Date</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr><td>Campaign launched</td><td style="color:var(--smoke);">Summer Sale 2025</td><td style="color:var(--smoke);">May 10, 2025</td><td><span class="badge badge-green">Done</span></td></tr>
+            <tr><td>Budget top-up</td><td style="color:var(--smoke);">Brand Awareness</td><td style="color:var(--smoke);">May 8, 2025</td><td><span class="badge badge-blue">Processed</span></td></tr>
+            <tr><td>A/B test started</td><td style="color:var(--smoke);">Email Newsletter</td><td style="color:var(--smoke);">May 6, 2025</td><td><span class="badge badge-yellow">Running</span></td></tr>
+            <tr><td>Report generated</td><td style="color:var(--smoke);">All Campaigns</td><td style="color:var(--smoke);">May 5, 2025</td><td><span class="badge badge-blue">Ready</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+</div>
+
+<style>
+@media(max-width:900px){
+  .main [style*="grid-template-columns:1fr 1.6fr"],
+  .main [style*="grid-template-columns:1.4fr 1fr"]{
+    display:block!important;
+  }
+  .main [style*="grid-template-columns:1fr 1.6fr"]>.card,
+  .main [style*="grid-template-columns:1.4fr 1fr"]>.card{
+    margin-bottom:18px;
+  }
+}
+  .bar-chart{height:220px!important;display:flex;align-items:flex-end;gap:12px;padding:10px 5px 0}
+  .bar-chart .bar{flex:1;min-width:22px;border-radius:6px 6px 0 0}
+  .card img{width:100%;height:100%;object-fit:cover;display:block}
+
+    .right-box {
+        position: relative;
+        background-size: cover !important;
+        background-position: center !important;
+    }
+    .right-box .welcome-text {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        z-index: 2;
+        color: white;
+        font-weight: bold;
+        background: rgba(0,0,0,0.4);
+        padding: 4px 8px;
+        border-radius: 4px;
+    }
+    
+</style>
+
+<script>
+(function(){
+  const s=JSON.parse(localStorage.getItem('stackly_session')||'null');
+  if(!s||s.role!=='client'){window.location.href='login.html';return;}
+  document.getElementById('nav-email').textContent=s.email||'';
+  document.getElementById('nav-welcome').textContent=s.name||s.email||'User';
+})();
+function logout(){localStorage.removeItem('stackly_session');window.location.href='index.html';}
+function toggleSidebar(){
+  document.getElementById('sidebar').classList.toggle('open');
+  document.getElementById('overlay').classList.toggle('open');
+}
+window.addEventListener('load',()=>{
+  const bb=document.querySelector('.budget-bar');
+  if(bb){const w=bb.style.width;bb.style.width='0';setTimeout(()=>{bb.style.width=w;},300);}
+  document.querySelectorAll('.progress-fill').forEach(b=>{
+    const w=b.style.width;b.style.width='0';setTimeout(()=>{b.style.width=w;},400);
+  });
+});
+</script>
+</body>
+</html>

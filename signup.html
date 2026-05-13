@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Create Account – Stackly</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800;900&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --gold:#F0A500;--gold-light:#FFD166;--gold-dark:#C67F00;
+  --ink:#0A0E1A;--ink-mid:#131929;--ink-light:#1E2D45;
+  --slate:#2A3F5F;--smoke:#8BA3C7;--mist:#C4D4E8;
+  --white:#FFFFFF;--error:#FF5C5C;
+  --border:rgba(255,255,255,0.1);--input-bg:rgba(255,255,255,0.05);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html,body{width:100%;overflow-x:hidden;}
+body{
+  font-family:'Outfit',sans-serif;background:var(--ink);
+  color:var(--white);min-height:100vh;
+  display:flex;align-items:stretch;
+}
+.split{display:flex;width:100%;min-height:100vh;}
+
+/* ── LEFT PANEL ── */
+.left-panel{
+  flex:1;display:flex;align-items:center;justify-content:center;
+  padding:60px 48px;position:relative;overflow:hidden;
+}
+.left-bg-img{
+  position:absolute;inset:0;z-index:0;
+  background:url('./assets/company.webp') center/cover no-repeat;
+}
+.left-bg-overlay{
+  position:absolute;inset:0;z-index:1;
+  background:
+    linear-gradient(145deg,rgba(10,14,26,0.9) 0%,rgba(19,25,41,0.82) 100%),
+    radial-gradient(ellipse 70% 60% at 80% 20%,rgba(240,165,0,0.2) 0%,transparent 65%),
+    radial-gradient(ellipse 50% 60% at 0% 90%,rgba(42,63,95,0.5) 0%,transparent 60%);
+}
+.left-grid{
+  position:absolute;inset:0;z-index:2;
+  background-image:linear-gradient(rgba(240,165,0,0.06) 1px,transparent 1px),
+                   linear-gradient(90deg,rgba(240,165,0,0.06) 1px,transparent 1px);
+  background-size:56px 56px;
+  mask-image:radial-gradient(ellipse 80% 90% at 60% 40%,black 0%,transparent 100%);
+}
+.blob{position:absolute;border-radius:50%;filter:blur(80px);z-index:2;animation:drift 8s ease-in-out infinite alternate;}
+.b1{width:320px;height:320px;background:rgba(240,165,0,0.1);top:-80px;right:-60px;}
+.b2{width:260px;height:260px;background:rgba(42,63,95,0.35);bottom:60px;left:-60px;animation-delay:3s;}
+@keyframes drift{from{transform:translateY(0)}to{transform:translateY(28px)}}
+
+/* Particles */
+.particle{position:absolute;border-radius:50%;z-index:3;animation:particleFloat linear infinite;pointer-events:none;}
+.pt1{width:4px;height:4px;background:var(--gold);top:25%;left:18%;opacity:.5;animation-duration:13s;}
+.pt2{width:3px;height:3px;background:var(--gold-light);top:70%;left:12%;opacity:.4;animation-duration:17s;animation-delay:-6s;}
+.pt3{width:4px;height:4px;background:var(--gold);top:45%;left:75%;opacity:.4;animation-duration:15s;animation-delay:-2s;}
+@keyframes particleFloat{0%{transform:translateY(0)}100%{transform:translateY(-100vh)}}
+
+.left-content{position:relative;z-index:4;text-align:left;max-width:440px;width:100%;}
+.left-logo{margin-bottom:40px;text-align:center;}
+.left-logo img{height:40px;}
+.left-content h2{
+  font-family:'Playfair Display',serif;font-size:clamp(1.9rem,3vw,2.8rem);
+  font-weight:900;line-height:1.12;margin-bottom:14px;text-align:center;
+}
+.left-content h2 em{color:var(--gold);font-style:normal;}
+.left-content>p{color:var(--smoke);font-size:14px;line-height:1.75;margin-bottom:36px;text-align:center;}
+
+/* Steps */
+.steps{display:flex;flex-direction:column;gap:16px;}
+.step{
+  display:flex;align-items:flex-start;gap:16px;padding:16px 18px;
+  background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);
+  border-radius:14px;transition:.3s;
+}
+.step:hover{background:rgba(240,165,0,0.07);border-color:rgba(240,165,0,0.22);}
+.step-num{
+  width:34px;height:34px;min-width:34px;border-radius:50%;flex-shrink:0;
+  background:linear-gradient(135deg,var(--gold),var(--gold-dark));
+  display:flex;align-items:center;justify-content:center;
+  font-size:13px;font-weight:800;color:var(--ink);
+  font-family:'Playfair Display',serif;
+}
+.step-text strong{display:block;font-size:14px;font-weight:600;color:var(--white);margin-bottom:2px;}
+.step-text span{font-size:12px;color:var(--smoke);}
+
+/* Stat cards */
+.stat-cards{display:flex;flex-direction:column;gap:10px;margin-top:28px;}
+.scard{
+  display:flex;align-items:center;gap:14px;
+  padding:12px 16px;background:rgba(255,255,255,.04);
+  border:1px solid rgba(240,165,0,0.15);border-radius:12px;
+  animation:floatY 4s ease-in-out infinite alternate;
+}
+.scard:nth-child(2){animation-delay:1.5s;}
+@keyframes floatY{from{transform:translateY(0)}to{transform:translateY(-6px)}}
+.scard-icon{font-size:20px;}
+.scard-val{font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:800;color:var(--gold);}
+.scard-label{font-size:11px;color:var(--smoke);}
+
+/* ── RIGHT PANEL ── */
+.right-panel{
+  width:520px;min-width:0;display:flex;align-items:center;justify-content:center;
+  padding:36px 44px;
+  background:rgba(255,255,255,0.02);border-left:1px solid rgba(255,255,255,0.06);
+  overflow-y:auto;
+}
+.form-box{width:100%;max-width:420px;animation:slideIn .6s ease both;}
+@keyframes slideIn{from{opacity:0;transform:translateX(24px)}to{opacity:1;transform:none}}
+.form-header{margin-bottom:26px;}
+.form-header h3{font-family:'Playfair Display',serif;font-size:1.9rem;font-weight:800;margin-bottom:6px;}
+.form-header p{color:var(--smoke);font-size:14px;}
+
+.social-btns{display:flex;gap:10px;margin-bottom:16px;}
+.social-btn{
+  flex:1;padding:10px;display:flex;align-items:center;justify-content:center;gap:8px;
+  background:var(--input-bg);border:1.5px solid var(--border);border-radius:10px;
+  color:var(--white);font-size:13px;font-weight:600;cursor:pointer;
+  text-decoration:none;transition:all .25s;font-family:'Outfit',sans-serif;
+}
+.social-btn:hover{border-color:var(--gold);background:rgba(240,165,0,0.06);}
+.divider{display:flex;align-items:center;gap:12px;margin:16px 0;color:var(--smoke);font-size:12px;}
+.divider::before,.divider::after{content:'';flex:1;height:1px;background:var(--border);}
+
+.form-row-2{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.form-group{margin-bottom:16px;position:relative;}
+.form-group label{
+  display:block;font-size:11px;font-weight:700;letter-spacing:.07em;
+  color:rgba(240,165,0,0.85);margin-bottom:6px;text-transform:uppercase;
+}
+.form-group select,.form-group input{
+  width:100%;padding:11px 14px;
+  background:var(--input-bg);border:1.5px solid var(--border);
+  border-radius:10px;color:var(--white);
+  font-family:'Outfit',sans-serif;font-size:14px;outline:none;
+  transition:border .25s,box-shadow .25s;-webkit-appearance:none;appearance:none;
+}
+.form-group select option{background:var(--ink);color:var(--white);}
+.form-group input::placeholder{color:rgba(139,163,199,.5);}
+.form-group input:focus,.form-group select:focus{
+  border-color:var(--gold);box-shadow:0 0 0 3px rgba(240,165,0,0.1);
+}
+.input-icon{position:relative;}
+.input-icon input{padding-left:40px;}
+.input-icon .icon{position:absolute;left:13px;top:50%;transform:translateY(-50%);font-size:14px;color:var(--smoke);pointer-events:none;}
+.pw-toggle{position:absolute;right:13px;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--smoke);cursor:pointer;font-size:14px;transition:color .2s;}
+.pw-toggle:hover{color:var(--gold);}
+.error-msg{display:none;color:var(--error);font-size:11px;margin-top:4px;}
+.error-msg.show{display:block;}
+.field-error input,.field-error select{border-color:var(--error)!important;}
+
+.pw-strength{height:3px;border-radius:99px;margin-top:6px;background:var(--border);overflow:hidden;}
+.pw-strength-bar{height:100%;border-radius:99px;width:0;transition:width .3s,background .3s;}
+
+.terms-row{display:flex;align-items:flex-start;gap:10px;margin-bottom:16px;}
+.terms-row input[type=checkbox]{accent-color:var(--gold);width:15px;height:15px;margin-top:2px;flex-shrink:0;}
+.terms-row label{font-size:12px;color:var(--smoke);line-height:1.5;}
+.terms-row a{color:var(--gold);text-decoration:none;font-weight:600;}
+
+.btn-submit{
+  width:100%;padding:13px;
+  background:linear-gradient(135deg,var(--gold),var(--gold-dark));
+  color:var(--ink);border:none;border-radius:10px;
+  font-family:'Outfit',sans-serif;font-size:15px;font-weight:700;
+  cursor:pointer;transition:all .3s;position:relative;overflow:hidden;
+}
+.btn-submit::after{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(135deg,transparent,rgba(255,255,255,0.18),transparent);
+  transform:translateX(-100%);transition:.5s;
+}
+.btn-submit:hover::after{transform:translateX(100%);}
+.btn-submit:hover{transform:translateY(-2px);box-shadow:0 12px 36px rgba(240,165,0,.4);}
+
+.footer-link{text-align:center;font-size:13px;color:var(--smoke);margin-top:16px;}
+.footer-link a{color:var(--gold);text-decoration:none;font-weight:600;}
+.footer-link a:hover{text-decoration:underline;}
+
+/* ── RESPONSIVE ── */
+@media(max-width:900px){
+  .left-panel{display:none;}
+  .right-panel{width:100%;border-left:none;padding:40px 28px;}
+}
+@media(max-width:480px){
+  .right-panel{padding:32px 20px;}
+  .form-row-2{grid-template-columns:1fr;}
+  .social-btns{flex-direction:column;}
+}
+</style>
+</head>
+<body>
+<div class="split">
+  <div class="left-panel">
+    <div class="left-bg-img"></div>
+    <div class="left-bg-overlay"></div>
+    <div class="left-grid"></div>
+    <div class="blob b1"></div>
+    <div class="blob b2"></div>
+    <div class="particle pt1"></div>
+    <div class="particle pt2"></div>
+    <div class="particle pt3"></div>
+    <div class="left-content">
+      <div class="left-logo"><a href="index.html"><img src="./assets/logo.webp" alt="Stackly"/></a></div>
+      <h2>Join <em>Stackly</em> Today</h2>
+      <p>Get started in minutes. No credit card required.</p>
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-text"><strong>Create Account</strong><span>Sign up with email or Google</span></div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-text"><strong>Set Up Workspace</strong><span>Add your brand and connect ad accounts</span></div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-text"><strong>Launch &amp; Grow</strong><span>Start managing campaigns and tracking ROI</span></div>
+        </div>
+      </div>
+      <div class="stat-cards">
+        <div class="scard">
+          <div class="scard-icon">📊</div>
+          <div><div class="scard-val">2,400+</div><div class="scard-label">Active marketers</div></div>
+        </div>
+        <div class="scard">
+          <div class="scard-icon">📈</div>
+          <div><div class="scard-val">3.8× ROAS</div><div class="scard-label">Average return on ad spend</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="right-panel">
+    <div class="form-box">
+      <div class="form-header">
+        <h3>Create Account</h3>
+        <p>Join thousands of marketers on Stackly</p>
+      </div>
+
+      <div class="social-btns">
+        <a href="404.html" class="social-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
+          Google
+        </a>
+        <a href="404.html" class="social-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="#1877F2"><path d="M24 12.073C24 5.405 18.627 0 12 0S0 5.405 0 12.073C0 18.1 4.388 23.094 10.125 24v-8.437H7.078v-3.49h3.047V9.41c0-3.025 1.79-4.697 4.533-4.697 1.312 0 2.686.236 2.686.236v2.97h-1.513c-1.491 0-1.956.93-1.956 1.886v2.268h3.328l-.532 3.49h-2.796V24C19.612 23.094 24 18.1 24 12.073z"/></svg>
+          Facebook
+        </a>
+      </div>
+      <div class="divider">or sign up with email</div>
+
+      <div class="form-row-2">
+        <div class="form-group" id="grp-name">
+          <label>Full Name</label>
+          <div class="input-icon">
+            <span class="icon">👤</span>
+            <input type="text" id="name" placeholder="John Doe"/>
+          </div>
+          <div class="error-msg" id="err-name">Enter your full name.</div>
+        </div>
+        <div class="form-group" id="grp-role">
+          <label>Role</label>
+          <select id="role">
+            <option value="">Select role</option>
+            <option value="admin">Admin</option>
+            <option value="client">Client</option>
+          </select>
+          <div class="error-msg" id="err-role">Please select a role.</div>
+        </div>
+      </div>
+
+      <div class="form-group" id="grp-email">
+        <label>Email Address</label>
+        <div class="input-icon">
+          <span class="icon">✉</span>
+          <input type="email" id="email" placeholder="you@example.com"/>
+        </div>
+        <div class="error-msg" id="err-email">Enter a valid email address.</div>
+      </div>
+
+      <div class="form-group" id="grp-password">
+        <label>Password</label>
+        <div class="input-icon" style="position:relative;">
+          <span class="icon">🔒</span>
+          <input type="password" id="password" placeholder="Min 6 characters" oninput="checkStrength(this.value)" style="padding-right:40px;"/>
+          <button class="pw-toggle" type="button" onclick="togglePw('password',this)">👁</button>
+        </div>
+        <div class="pw-strength"><div class="pw-strength-bar" id="strengthBar"></div></div>
+        <div class="error-msg" id="err-password">Password must be at least 6 characters.</div>
+      </div>
+
+      <div class="form-group" id="grp-confirm">
+        <label>Confirm Password</label>
+        <div class="input-icon" style="position:relative;">
+          <span class="icon">🔒</span>
+          <input type="password" id="confirm" placeholder="Re-enter password" style="padding-right:40px;"/>
+          <button class="pw-toggle" type="button" onclick="togglePw('confirm',this)">👁</button>
+        </div>
+        <div class="error-msg" id="err-confirm">Passwords do not match.</div>
+      </div>
+
+      <div class="terms-row" id="grp-terms">
+        <input type="checkbox" id="terms"/>
+        <label for="terms">I agree to the <a href="404.html">Terms of Service</a> and <a href="404.html">Privacy Policy</a></label>
+      </div>
+      <div class="error-msg" id="err-terms" style="margin-top:-10px;margin-bottom:12px;">You must accept the terms.</div>
+
+      <button class="btn-submit" onclick="handleSignup()">Create Account →</button>
+      <div class="footer-link">Already have an account? <a href="login.html">Sign in</a></div>
+    </div>
+  </div>
+</div>
+<script>
+function togglePw(id,btn){const inp=document.getElementById(id);inp.type=inp.type==='password'?'text':'password';btn.textContent=inp.type==='password'?'👁':'🙈';}
+function checkStrength(val){
+  const bar=document.getElementById('strengthBar');let s=0;
+  if(val.length>=6)s++;if(val.length>=10)s++;if(/[A-Z]/.test(val)&&/[0-9]/.test(val))s++;
+  if(val.length===0){bar.style.width='0';return;}
+  bar.style.width=['33%','66%','100%'][s-1]||'10%';
+  bar.style.background=['#FF5C5C','#FFD166','#4ECB71'][s-1]||'#FF5C5C';
+}
+function handleSignup(){
+  let valid=true;
+  ['name','role','email','password','confirm'].forEach(f=>{
+    document.getElementById('grp-'+f).classList.remove('field-error');
+    document.getElementById('err-'+f).classList.remove('show');
+  });
+  document.getElementById('err-terms').classList.remove('show');
+  const name=document.getElementById('name').value.trim();
+  const role=document.getElementById('role').value;
+  const email=document.getElementById('email').value.trim();
+  const password=document.getElementById('password').value;
+  const confirm=document.getElementById('confirm').value;
+  const terms=document.getElementById('terms').checked;
+  if(!name){document.getElementById('grp-name').classList.add('field-error');document.getElementById('err-name').classList.add('show');valid=false;}
+  if(!role){document.getElementById('grp-role').classList.add('field-error');document.getElementById('err-role').classList.add('show');valid=false;}
+  if(!email||!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){document.getElementById('grp-email').classList.add('field-error');document.getElementById('err-email').classList.add('show');valid=false;}
+  if(password.length<6){document.getElementById('grp-password').classList.add('field-error');document.getElementById('err-password').classList.add('show');valid=false;}
+  if(password!==confirm){document.getElementById('grp-confirm').classList.add('field-error');document.getElementById('err-confirm').classList.add('show');valid=false;}
+  if(!terms){document.getElementById('err-terms').classList.add('show');valid=false;}
+  if(!valid)return;
+  const users=JSON.parse(localStorage.getItem('stackly_users')||'[]');
+  if(users.find(u=>u.email===email)){document.getElementById('grp-email').classList.add('field-error');document.getElementById('err-email').textContent='Email already registered.';document.getElementById('err-email').classList.add('show');return;}
+  users.push({name,role,email,password});
+  localStorage.setItem('stackly_users',JSON.stringify(users));
+  window.location.href='login.html';
+}
+</script>
+</body>
+</html>
