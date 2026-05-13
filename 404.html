@@ -304,7 +304,7 @@
 
       <div class="actions">
         <a class="btn btn-primary" href="index.html">Back to Home</a>
-        <button class="btn btn-secondary" onclick="history.back()">Go Back</button>
+        <button class="btn btn-secondary" onclick="history.length > 1 ? history.back() : window.location.href='index.html'">Go Back</button>
       </div>
 
       <div class="footer-hint">Error Code: 404 | Stackly Digital Marketing</div>
