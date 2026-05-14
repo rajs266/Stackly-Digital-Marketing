@@ -659,10 +659,10 @@ function saveProfile(){
   let valid=true;
 
   if(!fn){showFieldError('fname','First name is required.');valid=false;}
-  else if(!/^[A-Za-z\s]+$/.test(fn)){showFieldError('fname','Name must contain letters only — no numbers or special characters.');valid=false;}
+  else if(!/^[A-Za-z\s]+$/.test(fn)){showFieldError('fname','Name can contain only alphabets — no numbers or special characters.');valid=false;}
   else clearFieldError('fname');
 
-  if(ln && !/^[A-Za-z\s]+$/.test(ln)){showFieldError('lname','Name must contain letters only — no numbers or special characters.');valid=false;}
+  if(ln && !/^[A-Za-z\s]+$/.test(ln)){showFieldError('lname','Name can contain only alphabets — no numbers or special characters.');valid=false;}
   else clearFieldError('lname');
 
   if(!em){showFieldError('pemail','Email address is required.');valid=false;}

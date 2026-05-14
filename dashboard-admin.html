@@ -702,7 +702,7 @@
 </style>
 
 <script>
-// Auth check
+
 (function(){
   const s=JSON.parse(localStorage.getItem('stackly_session')||'null');
   if(!s||s.role!=='admin'){window.location.href='index.html';return;}
@@ -730,19 +730,19 @@ function toggleSidebar(){
 }
 
 function showPage(id, el){
-  // Close sidebar on mobile
+  
   document.getElementById('sidebar').classList.remove('open');
   document.getElementById('overlay').classList.remove('open');
-  // Hide all pages
+  
   document.querySelectorAll('.page-section').forEach(p=>p.classList.remove('active'));
-  // Show target
+  
   document.getElementById('page-'+id).classList.add('active');
-  // Update sidebar active state
+  
   document.querySelectorAll('.sidebar-item').forEach(i=>i.classList.remove('active'));
   if(el) el.classList.add('active');
-  // Scroll to top
+  
   window.scrollTo({top:0,behavior:'smooth'});
-  // Animate progress bars + reveal elements
+  
   setTimeout(()=>{
     document.querySelectorAll('#page-'+id+' .progress-fill').forEach(b=>{
       const w=b.style.width;b.style.width='0';setTimeout(()=>{b.style.width=w;},50);
@@ -750,7 +750,7 @@ function showPage(id, el){
     document.querySelectorAll('#page-'+id+' .cp-fill').forEach(b=>{
       const w=b.style.width;b.style.width='0';setTimeout(()=>{b.style.width=w;},50);
     });
-    // Trigger reveal for newly shown page
+    
     document.querySelectorAll('#page-'+id+' .reveal,#page-'+id+' .reveal-left,#page-'+id+' .reveal-right').forEach((el,i)=>{
       el.classList.remove('visible');
       setTimeout(()=>el.classList.add('visible'),i*55+100);
@@ -784,27 +784,27 @@ function saveProfile(){
   const ln=document.getElementById('lname').value.trim();
   const em=document.getElementById('pemail').value.trim();
 
-  // Get phone input (3rd input in profile card)
+  
   const phoneEl=document.querySelector('#page-profile .card input[type="tel"]');
   const phone=phoneEl?phoneEl.value.trim():'';
 
   let valid=true;
 
-  // First name: letters + spaces only
+  
   if(!fn){showFieldError('fname','First name is required.');valid=false;}
-  else if(!/^[A-Za-z\s]+$/.test(fn)){showFieldError('fname','Name must contain letters only — no numbers or special characters.');valid=false;}
+  else if(!/^[A-Za-z\s]+$/.test(fn)){showFieldError('fname','Name can contain only alphabets — no numbers or special characters.');valid=false;}
   else clearFieldError('fname');
 
-  // Last name: letters + spaces only (optional but if filled must be valid)
-  if(ln && !/^[A-Za-z\s]+$/.test(ln)){showFieldError('lname','Name must contain letters only — no numbers or special characters.');valid=false;}
+  
+  if(ln && !/^[A-Za-z\s]+$/.test(ln)){showFieldError('lname','Name can contain only alphabets — no numbers or special characters.');valid=false;}
   else clearFieldError('lname');
 
-  // Email: must have @ and end with .com / .in / etc.
+  
   if(!em){showFieldError('pemail','Email address is required.');valid=false;}
   else if(!/^[^\s@]+@[^\s@]+\.[a-zA-Z]{2,}$/.test(em)){showFieldError('pemail','Enter a valid email address (e.g. name@example.com).');valid=false;}
   else clearFieldError('pemail');
 
-  // Phone: exactly 10 digits
+  
   const phoneDigits=phone.replace(/\D/g,'');
   if(phoneEl){
     if(!phone){showFieldError('phone-field','Phone number is required.');valid=false;}
@@ -844,7 +844,7 @@ function initScrollProgress(){
 }
 
 function initScrollReveal(){
-  // Add reveal classes to cards and sections
+  
   document.querySelectorAll('.stat-card').forEach(el=>el.classList.add('reveal'));
   document.querySelectorAll('.card').forEach(el=>el.classList.add('reveal'));
   document.querySelectorAll('.campaign-card').forEach(el=>el.classList.add('reveal'));
