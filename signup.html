@@ -390,10 +390,10 @@ function handleSignup(){
   const confirm=document.getElementById('confirm').value;
   const terms=document.getElementById('terms').checked;
 
-  // Name validation: only letters and spaces allowed
+
   const nameRegex = /^[a-zA-Z\s]+$/;
   if(!name){document.getElementById('grp-name').classList.add('field-error');document.getElementById('err-name').textContent='Enter your full name.';document.getElementById('err-name').classList.add('show');valid=false;}
-  else if(!nameRegex.test(name)){document.getElementById('grp-name').classList.add('field-error');document.getElementById('err-name').textContent='Name can only contain letters and spaces.';document.getElementById('err-name').classList.add('show');valid=false;}
+  else if(!nameRegex.test(name)){document.getElementById('grp-name').classList.add('field-error');document.getElementById('err-name').textContent='Name can contain only alphabets.';document.getElementById('err-name').classList.add('show');valid=false;}
   else if(name.length<2){document.getElementById('grp-name').classList.add('field-error');document.getElementById('err-name').textContent='Name must be at least 2 characters.';document.getElementById('err-name').classList.add('show');valid=false;}
 
   if(!role){document.getElementById('grp-role').classList.add('field-error');document.getElementById('err-role').classList.add('show');valid=false;}
