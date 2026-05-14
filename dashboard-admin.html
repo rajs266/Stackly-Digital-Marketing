@@ -5,8 +5,174 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <title>Admin Dashboard – Stackly</title>
 <link rel="stylesheet" href="dashboard.css"/>
+<style>
+
+.page-section{display:none;}
+.page-section.active{display:block;}
+
+
+.section-grid{display:grid;gap:18px;margin-bottom:18px;}
+.two-col{grid-template-columns:1fr 1fr;}
+.three-col{grid-template-columns:1fr 1fr 1fr;}
+
+
+.metric-row{display:flex;align-items:center;justify-content:space-between;padding:14px 0;border-bottom:1px solid var(--border);}
+.metric-row:last-child{border-bottom:none;}
+.metric-name{font-size:13px;color:var(--mist);}
+.metric-val{font-size:14px;font-weight:700;color:var(--white);}
+.metric-change{font-size:11px;font-weight:600;padding:2px 8px;border-radius:999px;}
+.metric-up{background:rgba(78,203,113,0.12);color:var(--green);}
+.metric-down{background:rgba(255,92,92,0.12);color:var(--red);}
+
+.chart-area{padding:16px 0 0;position:relative;}
+.line-chart-wrap{height:160px;display:flex;align-items:flex-end;gap:4px;padding-bottom:24px;position:relative;}
+.line-chart-wrap::before{content:'';position:absolute;left:0;right:0;top:0;bottom:24px;background:repeating-linear-gradient(to bottom,transparent,transparent calc(25% - 1px),rgba(255,255,255,0.04) calc(25% - 1px),rgba(255,255,255,0.04) 25%);}
+.lbar{flex:1;border-radius:4px 4px 0 0;background:linear-gradient(to top,rgba(240,165,0,0.3),rgba(240,165,0,0.8));transition:.3s;cursor:pointer;position:relative;}
+.lbar:hover{background:linear-gradient(to top,var(--gold-dark),var(--gold));box-shadow:0 0 12px rgba(240,165,0,0.4);}
+.lbar-label{position:absolute;bottom:-22px;left:50%;transform:translateX(-50%);font-size:9px;color:var(--smoke);white-space:nowrap;}
+
+
+.campaign-card{background:var(--card-bg);border:1px solid var(--border);border-radius:14px;padding:18px;transition:.3s;margin-bottom:14px;}
+.campaign-card:hover{border-color:rgba(240,165,0,0.2);transform:translateY(-2px);}
+.campaign-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px;gap:10px;flex-wrap:wrap;}
+.campaign-title{font-family:'Playfair Display',serif;font-size:1rem;font-weight:800;}
+.campaign-meta{display:flex;gap:16px;flex-wrap:wrap;margin-bottom:12px;}
+.campaign-meta-item{font-size:12px;color:var(--smoke);}
+.campaign-meta-item span{color:var(--white);font-weight:600;}
+.campaign-progress{margin-top:8px;}
+.cp-label{display:flex;justify-content:space-between;font-size:11px;margin-bottom:5px;}
+.cp-label span:first-child{color:var(--smoke);}
+.cp-label span:last-child{color:var(--gold);font-weight:700;}
+.cp-bar{height:5px;background:rgba(255,255,255,.08);border-radius:999px;overflow:hidden;}
+.cp-fill{height:100%;border-radius:999px;background:linear-gradient(90deg,var(--gold-dark),var(--gold));}
+
+
+.client-card{display:flex;align-items:center;gap:16px;padding:16px 18px;background:var(--card-bg);border:1px solid var(--border);border-radius:14px;margin-bottom:12px;transition:.3s;}
+.client-card:hover{border-color:rgba(240,165,0,0.2);transform:translateX(4px);}
+.client-av{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:800;flex-shrink:0;}
+.client-info{flex:1;min-width:0;}
+.client-name{font-weight:700;font-size:14px;margin-bottom:2px;}
+.client-email{font-size:11px;color:var(--smoke);}
+.client-stats{display:flex;gap:20px;flex-shrink:0;}
+.client-stat{text-align:right;}
+.client-stat-val{font-size:14px;font-weight:700;color:var(--gold);}
+.client-stat-label{font-size:10px;color:var(--smoke);}
+
+
+.report-item{display:flex;align-items:center;gap:14px;padding:14px 18px;background:var(--card-bg);border:1px solid var(--border);border-radius:12px;margin-bottom:10px;transition:.3s;cursor:pointer;}
+.report-item:hover{border-color:rgba(240,165,0,0.2);}
+.report-icon{width:40px;height:40px;border-radius:10px;background:rgba(240,165,0,0.1);border:1px solid rgba(240,165,0,0.2);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
+.report-info{flex:1;min-width:0;}
+.report-name{font-size:14px;font-weight:600;margin-bottom:2px;}
+.report-date{font-size:11px;color:var(--smoke);}
+.report-size{font-size:12px;color:var(--smoke);flex-shrink:0;}
+.download-btn{padding:6px 14px;border-radius:7px;background:rgba(240,165,0,0.1);border:1px solid rgba(240,165,0,0.25);color:var(--gold);font-size:12px;font-weight:600;cursor:pointer;transition:.2s;flex-shrink:0;}
+.download-btn:hover{background:rgba(240,165,0,0.2);}
+
+
+.billing-summary{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:20px;}
+.bill-card{background:var(--card-bg);border:1px solid var(--border);border-radius:14px;padding:18px;text-align:center;}
+.bill-val{font-family:'Playfair Display',serif;font-size:1.8rem;font-weight:900;color:var(--gold);margin-bottom:4px;}
+.bill-label{font-size:11px;color:var(--smoke);}
+
+.invoice-row{display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid rgba(255,255,255,.04);flex-wrap:wrap;gap:8px;}
+.invoice-row:last-child{border-bottom:none;}
+.invoice-client{font-size:13px;font-weight:600;}
+.invoice-date{font-size:11px;color:var(--smoke);margin-top:2px;}
+.invoice-amount{font-size:14px;font-weight:700;color:var(--gold);}
+
+
+.platform-card{background:var(--card-bg);border:1px solid var(--border);border-radius:14px;padding:20px;transition:.3s;}
+.platform-card:hover{border-color:rgba(240,165,0,0.2);transform:translateY(-2px);}
+.platform-header{display:flex;align-items:center;gap:12px;margin-bottom:16px;}
+.platform-icon{width:42px;height:42px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;}
+.platform-name{font-size:15px;font-weight:700;}
+.platform-status{font-size:11px;color:var(--green);margin-top:1px;}
+.platform-stat{display:flex;justify-content:space-between;padding:8px 0;border-top:1px solid rgba(255,255,255,.04);}
+.platform-stat-label{font-size:12px;color:var(--smoke);}
+.platform-stat-val{font-size:12px;font-weight:700;}
+
+
+.notif-item{display:flex;gap:14px;padding:16px 0;border-bottom:1px solid rgba(255,255,255,.04);}
+.notif-item:last-child{border-bottom:none;}
+.notif-icon{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0;}
+.notif-body{flex:1;min-width:0;}
+.notif-title{font-size:13px;font-weight:600;margin-bottom:3px;}
+.notif-desc{font-size:12px;color:var(--smoke);line-height:1.5;}
+.notif-time{font-size:10px;color:rgba(139,163,199,.5);margin-top:4px;}
+.notif-dot{width:7px;height:7px;border-radius:50%;background:var(--gold);flex-shrink:0;margin-top:5px;}
+
+
+.profile-hero{background:linear-gradient(135deg,rgba(240,165,0,0.08),rgba(42,63,95,0.15));border:1px solid var(--border);border-radius:16px;padding:28px;display:flex;align-items:center;gap:20px;margin-bottom:20px;flex-wrap:wrap;}
+.profile-av-big{width:70px;height:70px;border-radius:18px;background:linear-gradient(135deg,var(--slate),var(--gold-dark));display:flex;align-items:center;justify-content:center;font-size:28px;font-weight:800;color:var(--white);flex-shrink:0;border:2px solid rgba(240,165,0,0.3);}
+.profile-name{font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:800;margin-bottom:3px;}
+.profile-role-badge{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:999px;background:rgba(240,165,0,0.1);border:1px solid rgba(240,165,0,0.25);font-size:11px;font-weight:700;color:var(--gold);}
+.form-field{margin-bottom:16px;}
+.form-field label{display:block;font-size:11px;font-weight:700;color:rgba(240,165,0,0.85);letter-spacing:.07em;text-transform:uppercase;margin-bottom:7px;}
+.form-field input,.form-field select{width:100%;padding:11px 14px;background:rgba(255,255,255,0.04);border:1.5px solid rgba(255,255,255,0.1);border-radius:10px;color:var(--white);font-family:'Outfit',sans-serif;font-size:14px;outline:none;transition:.25s;-webkit-appearance:none;appearance:none;}
+.form-field input:focus,.form-field select:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(240,165,0,0.1);}
+.form-field input::placeholder{color:rgba(139,163,199,.4);}
+.form-field select option{background:var(--ink);}
+.form-row-2{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+
+
+.settings-item{display:flex;align-items:center;justify-content:space-between;padding:16px 0;border-bottom:1px solid rgba(255,255,255,.04);gap:10px;flex-wrap:wrap;}
+.settings-item:last-child{border-bottom:none;}
+.settings-label{font-size:14px;font-weight:600;}
+.settings-desc{font-size:12px;color:var(--smoke);margin-top:2px;}
+.toggle{position:relative;width:44px;height:24px;flex-shrink:0;}
+.toggle input{opacity:0;width:0;height:0;}
+.toggle-slider{position:absolute;inset:0;background:rgba(255,255,255,.12);border-radius:999px;cursor:pointer;transition:.3s;}
+.toggle-slider::before{content:'';position:absolute;width:18px;height:18px;left:3px;top:3px;background:var(--white);border-radius:50%;transition:.3s;}
+.toggle input:checked+.toggle-slider{background:var(--gold);}
+.toggle input:checked+.toggle-slider::before{transform:translateX(20px);}
+
+
+.team-member{display:flex;align-items:center;gap:14px;padding:14px 18px;background:var(--card-bg);border:1px solid var(--border);border-radius:12px;margin-bottom:10px;transition:.3s;flex-wrap:wrap;}
+.team-member:hover{border-color:rgba(240,165,0,0.15);}
+.team-av{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;flex-shrink:0;}
+.team-info{flex:1;min-width:0;}
+.team-name{font-size:13px;font-weight:600;}
+.team-email{font-size:11px;color:var(--smoke);}
+.team-actions{display:flex;gap:8px;align-items:center;}
+.rbtn{padding:5px 12px;border-radius:7px;font-size:11px;font-weight:600;cursor:pointer;border:1px solid var(--border);background:transparent;color:var(--smoke);transition:.2s;}
+.rbtn:hover{border-color:var(--gold);color:var(--gold);}
+.rbtn.danger:hover{border-color:var(--red);color:var(--red);}
+
+
+.faq-item{border:1px solid var(--border);border-radius:12px;margin-bottom:10px;overflow:hidden;transition:.3s;}
+.faq-item:hover{border-color:rgba(240,165,0,0.2);}
+.faq-q{padding:16px 18px;font-size:14px;font-weight:600;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:10px;}
+.faq-toggle{font-size:18px;color:var(--gold);transition:.3s;flex-shrink:0;}
+.faq-a{padding:0 18px;font-size:13px;color:var(--smoke);line-height:1.7;max-height:0;overflow:hidden;transition:max-height .35s ease,padding .3s;}
+.faq-item.open .faq-a{max-height:200px;padding:0 18px 16px;}
+.faq-item.open .faq-toggle{transform:rotate(45deg);}
+
+.contact-card{background:linear-gradient(135deg,rgba(240,165,0,0.06),rgba(42,63,95,0.12));border:1px solid rgba(240,165,0,0.15);border-radius:14px;padding:22px;text-align:center;}
+.contact-icon{font-size:36px;margin-bottom:12px;}
+.contact-title{font-family:'Playfair Display',serif;font-size:1rem;font-weight:800;margin-bottom:6px;}
+.contact-desc{font-size:12px;color:var(--smoke);margin-bottom:14px;line-height:1.6;}
+.contact-btn{display:inline-block;padding:9px 20px;background:linear-gradient(135deg,var(--gold),var(--gold-dark));color:var(--ink);border-radius:9px;font-size:13px;font-weight:700;text-decoration:none;cursor:pointer;border:none;font-family:'Outfit',sans-serif;transition:.25s;}
+.contact-btn:hover{box-shadow:0 8px 20px rgba(240,165,0,.35);transform:translateY(-2px);}
+
+
+@media(max-width:900px){
+  .two-col,.three-col,.billing-summary{grid-template-columns:1fr!important;}
+  .client-stats{flex-direction:column;gap:4px;align-items:flex-end;}
+  .form-row-2{grid-template-columns:1fr!important;}
+  .team-member{flex-wrap:wrap;}
+  .profile-hero{flex-direction:column;align-items:flex-start;}
+}
+@media(max-width:600px){
+  .campaign-meta{gap:10px;}
+  .invoice-row{flex-direction:column;align-items:flex-start;}
+}
+</style>
 </head>
 <body>
+<div class="dash-orb dash-orb-1"></div>
+<div class="dash-orb dash-orb-2"></div>
+<div class="scroll-indicator" id="scrollBar"></div>
 
 
 <nav class="topnav">
@@ -31,28 +197,27 @@
   <div class="sidebar-role-block">
     <div class="sidebar-role-badge"><div class="role-dot"></div> Admin Account</div>
   </div>
-
   <div class="sidebar-nav">
     <div class="sidebar-section">
       <div class="sidebar-label">Dashboard</div>
-      <a class="sidebar-item active" href="dashboard-admin.html"><span class="s-icon">🏠</span> Overview</a>
-      <a class="sidebar-item" href="404.html"><span class="s-icon">📊</span> Analytics</a>
-      <a class="sidebar-item" href="404.html"><span class="s-icon">🚀</span> Campaigns</a>
-      <a class="sidebar-item" href="404.html"><span class="s-icon">👥</span> Clients</a>
+      <a class="sidebar-item active" href="#" onclick="showPage('overview',this)"><span class="s-icon">🏠</span> Overview</a>
+      <a class="sidebar-item" href="#" onclick="showPage('analytics',this)"><span class="s-icon">📊</span> Analytics</a>
+      <a class="sidebar-item" href="#" onclick="showPage('campaigns',this)"><span class="s-icon">🚀</span> Campaigns</a>
+      <a class="sidebar-item" href="#" onclick="showPage('clients',this)"><span class="s-icon">👥</span> Clients</a>
     </div>
     <div class="sidebar-section">
       <div class="sidebar-label">Management</div>
-      <a class="sidebar-item" href="404.html"><span class="s-icon">📋</span> Reports</a>
-      <a class="sidebar-item" href="404.html"><span class="s-icon">💰</span> Billing</a>
-      <a class="sidebar-item" href="404.html"><span class="s-icon">🎯</span> Ad Manager</a>
-      <a class="sidebar-item" href="404.html"><span class="s-icon">🔔</span> Notifications</a>
+      <a class="sidebar-item" href="#" onclick="showPage('reports',this)"><span class="s-icon">📋</span> Reports</a>
+      <a class="sidebar-item" href="#" onclick="showPage('billing',this)"><span class="s-icon">💰</span> Billing</a>
+      <a class="sidebar-item" href="#" onclick="showPage('admanager',this)"><span class="s-icon">🎯</span> Ad Manager</a>
+      <a class="sidebar-item" href="#" onclick="showPage('notifications',this)"><span class="s-icon">🔔</span> Notifications</a>
     </div>
     <div class="sidebar-section">
       <div class="sidebar-label">Settings</div>
-      <a class="sidebar-item" href="404.html"><span class="s-icon">👤</span> Profile</a>
-      <a class="sidebar-item" href="404.html"><span class="s-icon">⚙️</span> Settings</a>
-      <a class="sidebar-item" href="404.html"><span class="s-icon">🔐</span> Team Access</a>
-      <a class="sidebar-item" href="404.html"><span class="s-icon">🆘</span> Support</a>
+      <a class="sidebar-item" href="#" onclick="showPage('profile',this)"><span class="s-icon">👤</span> Profile</a>
+      <a class="sidebar-item" href="#" onclick="showPage('settings',this)"><span class="s-icon">⚙️</span> Settings</a>
+      <a class="sidebar-item" href="#" onclick="showPage('teamaccess',this)"><span class="s-icon">🔐</span> Team Access</a>
+      <a class="sidebar-item" href="#" onclick="showPage('support',this)"><span class="s-icon">🆘</span> Support</a>
     </div>
   </div>
 </aside>
@@ -60,192 +225,646 @@
 
 <div class="dash-layout">
   <main class="main">
-    <div class="page-header-row">
-      <div class="page-header">
-        <div class="page-title">Admin Dashboard</div>
-        <div class="page-sub">Manage all campaigns, clients and platform operations.</div>
-      </div>
-      <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
-        <a href="404.html" class="action-btn action-btn-outline">Export Data</a>
-        <a href="404.html" class="action-btn action-btn-primary">+ New Campaign</a>
-      </div>
-    </div>
 
     
-    <div class="stats-grid">
-      <div class="stat-card">
-        <div class="stat-icon-wrap">👥</div>
-        <div class="stat-label">Total Clients</div>
-        <div class="stat-val">48</div>
-        <div class="stat-change up">↑ 5 new</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-icon-wrap">🚀</div>
-        <div class="stat-label">Active Campaigns</div>
-        <div class="stat-val">127</div>
-        <div class="stat-change up">↑ 12%</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-icon-wrap">👁</div>
-        <div class="stat-label">Total Impressions</div>
-        <div class="stat-val">2.4M</div>
-        <div class="stat-change up">↑ 28%</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-icon-wrap">💰</div>
-        <div class="stat-label">Revenue</div>
-        <div class="stat-val">₹12.5L</div>
-        <div class="stat-change up">↑ 18%</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-icon-wrap">📈</div>
-        <div class="stat-label">Avg. CTR</div>
-        <div class="stat-val">4.2%</div>
-        <div class="stat-change up">↑ 0.3%</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-icon-wrap">🏆</div>
-        <div class="stat-label">Conversions</div>
-        <div class="stat-val">3,842</div>
-        <div class="stat-change up">↑ 15%</div>
-      </div>
-    </div>
-
-    
-    <div style="display:grid;grid-template-columns:1fr 1.6fr;gap:18px;margin-bottom:18px;">
-      <div class="card">
-        <div class="card-title">Weekly Performance</div>
-        <div class="bar-chart">
-          <div class="bar" style="height:45%"></div>
-          <div class="bar" style="height:65%"></div>
-          <div class="bar" style="height:52%"></div>
-          <div class="bar hi" style="height:95%"></div>
-          <div class="bar" style="height:70%"></div>
-          <div class="bar" style="height:85%"></div>
-          <div class="bar" style="height:78%"></div>
-        </div>
-        <div class="bar-labels">
-          <span class="bar-label">Mon</span><span class="bar-label">Tue</span>
-          <span class="bar-label">Wed</span><span class="bar-label">Thu</span>
-          <span class="bar-label">Fri</span><span class="bar-label">Sat</span>
-          <span class="bar-label">Sun</span>
+    <div class="page-section active" id="page-overview">
+      <div class="page-hero-banner">
+        <div class="hero-content">
+          <div>
+            <div class="hero-title">Admin Dashboard</div>
+            <div class="hero-sub">Platform-wide overview — campaigns, clients & revenue</div>
+          </div>
+          <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
+            <button class="action-btn action-btn-outline" onclick="go404()">Export Data</button>
+            <button class="action-btn action-btn-primary" onclick="showPage('campaigns',document.querySelector('[onclick*=campaigns]'))">+ New Campaign</button>
+          </div>
         </div>
       </div>
-
-      <div class="card">
-        <div class="card-title">Recent Campaigns <a href="404.html" class="card-title-action">View All →</a></div>
-        <div class="table-wrap">
-          <table>
-            <thead><tr><th>Campaign</th><th>Client</th><th>Budget</th><th>Status</th></tr></thead>
+      
+      <div class="stats-marquee-wrap">
+        <div class="stats-marquee">
+          <div class="marquee-item"><div class="marquee-label">Total Clients</div><div class="marquee-val">48</div></div>
+          <div class="marquee-item"><div class="marquee-label">Active Campaigns</div><div class="marquee-val">127</div></div>
+          <div class="marquee-item"><div class="marquee-label">Total Impressions</div><div class="marquee-val">2.4M</div></div>
+          <div class="marquee-item"><div class="marquee-label">Revenue</div><div class="marquee-val">₹12.5L</div></div>
+          <div class="marquee-item"><div class="marquee-label">Avg CTR</div><div class="marquee-val">4.2%</div></div>
+          <div class="marquee-item"><div class="marquee-label">Conversions</div><div class="marquee-val">3,842</div></div>
+          <div class="marquee-item"><div class="marquee-label">ROAS</div><div class="marquee-val">3.8×</div></div>
+          
+          <div class="marquee-item"><div class="marquee-label">Total Clients</div><div class="marquee-val">48</div></div>
+          <div class="marquee-item"><div class="marquee-label">Active Campaigns</div><div class="marquee-val">127</div></div>
+          <div class="marquee-item"><div class="marquee-label">Total Impressions</div><div class="marquee-val">2.4M</div></div>
+          <div class="marquee-item"><div class="marquee-label">Revenue</div><div class="marquee-val">₹12.5L</div></div>
+          <div class="marquee-item"><div class="marquee-label">Avg CTR</div><div class="marquee-val">4.2%</div></div>
+          <div class="marquee-item"><div class="marquee-label">Conversions</div><div class="marquee-val">3,842</div></div>
+          <div class="marquee-item"><div class="marquee-label">ROAS</div><div class="marquee-val">3.8×</div></div>
+        </div>
+      </div>
+      <div class="stats-grid">
+        <div class="stat-card"><div class="stat-icon-wrap">👥</div><div class="stat-label">Total Clients</div><div class="stat-val">48</div><div class="stat-change up">↑ 5 new</div></div>
+        <div class="stat-card"><div class="stat-icon-wrap">🚀</div><div class="stat-label">Active Campaigns</div><div class="stat-val">127</div><div class="stat-change up">↑ 12%</div></div>
+        <div class="stat-card"><div class="stat-icon-wrap">👁</div><div class="stat-label">Total Impressions</div><div class="stat-val">2.4M</div><div class="stat-change up">↑ 28%</div></div>
+        <div class="stat-card"><div class="stat-icon-wrap">💰</div><div class="stat-label">Revenue</div><div class="stat-val">₹12.5L</div><div class="stat-change up">↑ 18%</div></div>
+        <div class="stat-card"><div class="stat-icon-wrap">📈</div><div class="stat-label">Avg. CTR</div><div class="stat-val">4.2%</div><div class="stat-change up">↑ 0.3%</div></div>
+        <div class="stat-card"><div class="stat-icon-wrap">🏆</div><div class="stat-label">Conversions</div><div class="stat-val">3,842</div><div class="stat-change up">↑ 15%</div></div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1.6fr;gap:18px;margin-bottom:18px;" class="responsive-grid">
+        <div class="card">
+          <div class="card-title">Weekly Performance</div>
+          <div class="bar-chart">
+            <div class="bar" style="height:45%"></div><div class="bar" style="height:65%"></div>
+            <div class="bar" style="height:52%"></div><div class="bar hi" style="height:95%"></div>
+            <div class="bar" style="height:70%"></div><div class="bar" style="height:85%"></div>
+            <div class="bar" style="height:78%"></div>
+          </div>
+          <div class="bar-labels">
+            <span class="bar-label">Mon</span><span class="bar-label">Tue</span><span class="bar-label">Wed</span>
+            <span class="bar-label">Thu</span><span class="bar-label">Fri</span><span class="bar-label">Sat</span><span class="bar-label">Sun</span>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title">Recent Campaigns <span class="card-title-action" onclick="showPage('campaigns',document.querySelector('[onclick*=campaigns]'))" style="cursor:pointer;">View All →</span></div>
+          <div class="table-wrap">
+            <table><thead><tr><th>Campaign</th><th>Client</th><th>Budget</th><th>Status</th></tr></thead>
             <tbody>
               <tr><td><strong>Summer Sale 2025</strong></td><td style="color:var(--smoke);">Acme Corp</td><td>₹80,000</td><td><span class="badge badge-green">Live</span></td></tr>
               <tr><td><strong>Brand Awareness</strong></td><td style="color:var(--smoke);">TechStart</td><td>₹40,000</td><td><span class="badge badge-yellow">Paused</span></td></tr>
               <tr><td><strong>Product Launch</strong></td><td style="color:var(--smoke);">Nexus Inc</td><td>₹1,20,000</td><td><span class="badge badge-green">Live</span></td></tr>
               <tr><td><strong>Holiday Special</strong></td><td style="color:var(--smoke);">ShopMart</td><td>₹60,000</td><td><span class="badge badge-blue">Scheduled</span></td></tr>
-            </tbody>
-          </table>
+            </tbody></table>
+          </div>
         </div>
       </div>
-    </div>
-
-    
-    <div style="display:grid;grid-template-columns:1.4fr 1fr;gap:18px;margin-bottom:18px;">
-      <div class="card">
-        <div class="card-title">Top Clients <a href="404.html" class="card-title-action">View All →</a></div>
-        <div class="table-wrap">
-          <table>
-            <thead><tr><th>Client</th><th>Campaigns</th><th>Spend</th><th>Status</th></tr></thead>
+      <div style="display:grid;grid-template-columns:1.4fr 1fr;gap:18px;margin-bottom:18px;" class="responsive-grid">
+        <div class="card">
+          <div class="card-title">Top Clients <span class="card-title-action" onclick="showPage('clients',document.querySelector('[onclick*=clients]'))" style="cursor:pointer;">View All →</span></div>
+          <div class="table-wrap">
+            <table><thead><tr><th>Client</th><th>Campaigns</th><th>Spend</th><th>Status</th></tr></thead>
             <tbody>
               <tr><td><strong>Acme Corp</strong></td><td style="color:var(--smoke);">8</td><td>₹4.2L</td><td><span class="badge badge-green">Active</span></td></tr>
               <tr><td><strong>TechStart</strong></td><td style="color:var(--smoke);">5</td><td>₹2.8L</td><td><span class="badge badge-green">Active</span></td></tr>
               <tr><td><strong>Nexus Inc</strong></td><td style="color:var(--smoke);">3</td><td>₹1.5L</td><td><span class="badge badge-yellow">Pending</span></td></tr>
               <tr><td><strong>ShopMart</strong></td><td style="color:var(--smoke);">6</td><td>₹3.1L</td><td><span class="badge badge-green">Active</span></td></tr>
-            </tbody>
-          </table>
+            </tbody></table>
+          </div>
         </div>
-      </div>
-
-      <div class="card">
-        <div class="card-title">Revenue Breakdown</div>
-        <div style="margin-bottom:16px;">
-          <div style="text-align:center;padding:8px 0;">
+        <div class="card">
+          <div class="card-title">Revenue Breakdown</div>
+          <div style="text-align:center;padding:8px 0 12px;">
             <div style="font-family:'Playfair Display',serif;font-size:2.2rem;font-weight:900;color:var(--gold);">₹12.5L</div>
             <div style="font-size:12px;color:var(--smoke);margin-top:3px;">Total Revenue This Month</div>
           </div>
-        </div>
-        <div style="border-top:1px solid var(--border);padding-top:12px;">
-          <div class="progress-row" style="margin-bottom:9px;">
-            <div class="progress-label">Google Ads</div>
-            <div class="progress-bar"><div class="progress-fill" style="width:55%"></div></div>
-            <div class="progress-val">55%</div>
-          </div>
-          <div class="progress-row" style="margin-bottom:9px;">
-            <div class="progress-label">Meta Ads</div>
-            <div class="progress-bar"><div class="progress-fill" style="width:30%"></div></div>
-            <div class="progress-val">30%</div>
-          </div>
-          <div class="progress-row" style="margin-bottom:0;">
-            <div class="progress-label">Email</div>
-            <div class="progress-bar"><div class="progress-fill" style="width:15%"></div></div>
-            <div class="progress-val">15%</div>
+          <div style="border-top:1px solid var(--border);padding-top:12px;">
+            <div class="progress-row"><div class="progress-label">Google Ads</div><div class="progress-bar"><div class="progress-fill" style="width:55%"></div></div><div class="progress-val">55%</div></div>
+            <div class="progress-row"><div class="progress-label">Meta Ads</div><div class="progress-bar"><div class="progress-fill" style="width:30%"></div></div><div class="progress-val">30%</div></div>
+            <div class="progress-row"><div class="progress-label">Email</div><div class="progress-bar"><div class="progress-fill" style="width:15%"></div></div><div class="progress-val">15%</div></div>
           </div>
         </div>
       </div>
-    </div>
-
-    
-    <div class="card">
-      <div class="card-title">Platform Activity <a href="404.html" class="card-title-action">View All →</a></div>
-      <div class="table-wrap">
-        <table>
-          <thead><tr><th>Activity</th><th>User/Client</th><th>Date</th><th>Status</th></tr></thead>
+      <div class="card">
+        <div class="card-title">Platform Activity <span class="card-title-action" style="cursor:pointer;" onclick="showPage('notifications',document.querySelector('[onclick*=notifications]'))">View All →</span></div>
+        <div class="table-wrap">
+          <table><thead><tr><th>Activity</th><th>User/Client</th><th>Date</th><th>Status</th></tr></thead>
           <tbody>
             <tr><td>New campaign created</td><td style="color:var(--smoke);">Acme Corp</td><td style="color:var(--smoke);">May 12, 2025</td><td><span class="badge badge-green">Done</span></td></tr>
             <tr><td>Client onboarded</td><td style="color:var(--smoke);">Nexus Inc</td><td style="color:var(--smoke);">May 11, 2025</td><td><span class="badge badge-blue">Processed</span></td></tr>
             <tr><td>Budget increased</td><td style="color:var(--smoke);">TechStart</td><td style="color:var(--smoke);">May 10, 2025</td><td><span class="badge badge-yellow">Running</span></td></tr>
             <tr><td>Report generated</td><td style="color:var(--smoke);">All Clients</td><td style="color:var(--smoke);">May 9, 2025</td><td><span class="badge badge-blue">Ready</span></td></tr>
-          </tbody>
-        </table>
+          </tbody></table>
+        </div>
       </div>
     </div>
+
+    
+    <div class="page-section" id="page-analytics">
+      <div class="page-header"><div class="page-title">Analytics</div><div class="page-sub">Platform-wide performance metrics and trends.</div></div>
+      <div class="stats-grid">
+        <div class="stat-card"><div class="stat-icon-wrap">👁</div><div class="stat-label">Total Impressions</div><div class="stat-val">24.6M</div><div class="stat-change up">↑ 28%</div></div>
+        <div class="stat-card"><div class="stat-icon-wrap">🖱</div><div class="stat-label">Total Clicks</div><div class="stat-val">1.03M</div><div class="stat-change up">↑ 19%</div></div>
+        <div class="stat-card"><div class="stat-icon-wrap">📈</div><div class="stat-label">Avg CTR</div><div class="stat-val">4.2%</div><div class="stat-change up">↑ 0.3%</div></div>
+        <div class="stat-card"><div class="stat-icon-wrap">💵</div><div class="stat-label">CPC</div><div class="stat-val">₹14.2</div><div class="stat-change down">↓ ₹1.1</div></div>
+      </div>
+      <div style="display:grid;grid-template-columns:1.6fr 1fr;gap:18px;margin-bottom:18px;" class="responsive-grid">
+        <div class="card">
+          <div class="card-title">Monthly Impressions</div>
+          <div class="line-chart-wrap">
+            <div class="lbar" style="height:40%"><span class="lbar-label">Jan</span></div>
+            <div class="lbar" style="height:55%"><span class="lbar-label">Feb</span></div>
+            <div class="lbar" style="height:48%"><span class="lbar-label">Mar</span></div>
+            <div class="lbar" style="height:70%"><span class="lbar-label">Apr</span></div>
+            <div class="lbar" style="height:62%"><span class="lbar-label">May</span></div>
+            <div class="lbar" style="height:85%"><span class="lbar-label">Jun</span></div>
+            <div class="lbar" style="height:78%"><span class="lbar-label">Jul</span></div>
+            <div class="lbar" style="height:92%"><span class="lbar-label">Aug</span></div>
+            <div class="lbar" style="height:88%"><span class="lbar-label">Sep</span></div>
+            <div class="lbar" style="height:100%"><span class="lbar-label">Oct</span></div>
+            <div class="lbar" style="height:95%"><span class="lbar-label">Nov</span></div>
+            <div class="lbar" style="height:97%"><span class="lbar-label">Dec</span></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title">Key Metrics</div>
+          <div class="metric-row"><span class="metric-name">Bounce Rate</span><div style="display:flex;gap:8px;align-items:center;"><span class="metric-val">38.4%</span><span class="metric-change metric-up">↓ Good</span></div></div>
+          <div class="metric-row"><span class="metric-name">Session Duration</span><div style="display:flex;gap:8px;align-items:center;"><span class="metric-val">3m 42s</span><span class="metric-change metric-up">↑ 12%</span></div></div>
+          <div class="metric-row"><span class="metric-name">New Users</span><div style="display:flex;gap:8px;align-items:center;"><span class="metric-val">18,420</span><span class="metric-change metric-up">↑ 24%</span></div></div>
+          <div class="metric-row"><span class="metric-name">Return Users</span><div style="display:flex;gap:8px;align-items:center;"><span class="metric-val">9,340</span><span class="metric-change metric-up">↑ 8%</span></div></div>
+          <div class="metric-row"><span class="metric-name">ROAS</span><div style="display:flex;gap:8px;align-items:center;"><span class="metric-val">3.8×</span><span class="metric-change metric-up">↑ 0.4×</span></div></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">Platform Breakdown</div>
+        <div class="progress-row"><div class="progress-label">Google Ads</div><div class="progress-bar"><div class="progress-fill" style="width:55%"></div></div><div class="progress-val">55%</div></div>
+        <div class="progress-row"><div class="progress-label">Meta / Instagram</div><div class="progress-bar"><div class="progress-fill" style="width:30%"></div></div><div class="progress-val">30%</div></div>
+        <div class="progress-row"><div class="progress-label">Email Marketing</div><div class="progress-bar"><div class="progress-fill" style="width:10%"></div></div><div class="progress-val">10%</div></div>
+        <div class="progress-row"><div class="progress-label">YouTube Ads</div><div class="progress-bar"><div class="progress-fill" style="width:5%"></div></div><div class="progress-val">5%</div></div>
+      </div>
+    </div>
+
+    
+    <div class="page-section" id="page-campaigns">
+      <div class="page-header-row">
+        <div class="page-header"><div class="page-title">Campaigns</div><div class="page-sub">Manage and monitor all active and scheduled campaigns.</div></div>
+        <div><button class="action-btn action-btn-primary" onclick="go404()">+ New Campaign</button></div>
+      </div>
+      <div class="stats-grid">
+        <div class="stat-card"><div class="stat-icon-wrap">🟢</div><div class="stat-label">Live</div><div class="stat-val">84</div><div class="stat-change up">Running now</div></div>
+        <div class="stat-card"><div class="stat-icon-wrap">⏸</div><div class="stat-label">Paused</div><div class="stat-val">21</div><div class="stat-change" style="color:var(--smoke)">Awaiting</div></div>
+        <div class="stat-card"><div class="stat-icon-wrap">🗓</div><div class="stat-label">Scheduled</div><div class="stat-val">22</div><div class="stat-change up">↑ 4 new</div></div>
+        <div class="stat-card"><div class="stat-icon-wrap">✅</div><div class="stat-label">Completed</div><div class="stat-val">340</div><div class="stat-change" style="color:var(--smoke)">All time</div></div>
+      </div>
+      <div class="campaign-card">
+        <div class="campaign-header"><div class="campaign-title">Summer Sale 2025</div><span class="badge badge-green">Live</span></div>
+        <div class="campaign-meta">
+          <div class="campaign-meta-item">Client: <span>Acme Corp</span></div>
+          <div class="campaign-meta-item">Platform: <span>Google Ads</span></div>
+          <div class="campaign-meta-item">Budget: <span>₹80,000</span></div>
+          <div class="campaign-meta-item">CTR: <span>5.1%</span></div>
+          <div class="campaign-meta-item">Impressions: <span>4,20,000</span></div>
+        </div>
+        <div class="campaign-progress">
+          <div class="cp-label"><span>Budget Used</span><span>68%</span></div>
+          <div class="cp-bar"><div class="cp-fill" style="width:68%"></div></div>
+        </div>
+      </div>
+      <div class="campaign-card">
+        <div class="campaign-header"><div class="campaign-title">Brand Awareness Drive</div><span class="badge badge-yellow">Paused</span></div>
+        <div class="campaign-meta">
+          <div class="campaign-meta-item">Client: <span>TechStart</span></div>
+          <div class="campaign-meta-item">Platform: <span>Instagram</span></div>
+          <div class="campaign-meta-item">Budget: <span>₹40,000</span></div>
+          <div class="campaign-meta-item">CTR: <span>2.8%</span></div>
+          <div class="campaign-meta-item">Impressions: <span>1,80,000</span></div>
+        </div>
+        <div class="campaign-progress">
+          <div class="cp-label"><span>Budget Used</span><span>42%</span></div>
+          <div class="cp-bar"><div class="cp-fill" style="width:42%"></div></div>
+        </div>
+      </div>
+      <div class="campaign-card">
+        <div class="campaign-header"><div class="campaign-title">Product Launch — NexFlow</div><span class="badge badge-green">Live</span></div>
+        <div class="campaign-meta">
+          <div class="campaign-meta-item">Client: <span>Nexus Inc</span></div>
+          <div class="campaign-meta-item">Platform: <span>Google + Meta</span></div>
+          <div class="campaign-meta-item">Budget: <span>₹1,20,000</span></div>
+          <div class="campaign-meta-item">CTR: <span>4.6%</span></div>
+          <div class="campaign-meta-item">Impressions: <span>6,80,000</span></div>
+        </div>
+        <div class="campaign-progress">
+          <div class="cp-label"><span>Budget Used</span><span>55%</span></div>
+          <div class="cp-bar"><div class="cp-fill" style="width:55%"></div></div>
+        </div>
+      </div>
+      <div class="campaign-card">
+        <div class="campaign-header"><div class="campaign-title">Holiday Special — End of Year</div><span class="badge badge-blue">Scheduled</span></div>
+        <div class="campaign-meta">
+          <div class="campaign-meta-item">Client: <span>ShopMart</span></div>
+          <div class="campaign-meta-item">Platform: <span>YouTube Ads</span></div>
+          <div class="campaign-meta-item">Budget: <span>₹60,000</span></div>
+          <div class="campaign-meta-item">Starts: <span>Dec 10, 2025</span></div>
+        </div>
+        <div class="campaign-progress">
+          <div class="cp-label"><span>Budget Used</span><span>0%</span></div>
+          <div class="cp-bar"><div class="cp-fill" style="width:0%"></div></div>
+        </div>
+      </div>
+    </div>
+
+    
+    <div class="page-section" id="page-clients">
+      <div class="page-header-row">
+        <div class="page-header"><div class="page-title">Clients</div><div class="page-sub">Manage all client accounts and their campaign activity.</div></div>
+        <div><button class="action-btn action-btn-primary" onclick="go404()">+ Onboard Client</button></div>
+      </div>
+      <div class="stats-grid">
+        <div class="stat-card"><div class="stat-icon-wrap">👥</div><div class="stat-label">Total Clients</div><div class="stat-val">48</div><div class="stat-change up">↑ 5 this month</div></div>
+        <div class="stat-card"><div class="stat-icon-wrap">✅</div><div class="stat-label">Active</div><div class="stat-val">40</div><div class="stat-change up">83%</div></div>
+        <div class="stat-card"><div class="stat-icon-wrap">⏳</div><div class="stat-label">Pending</div><div class="stat-val">8</div><div class="stat-change" style="color:var(--smoke)">Onboarding</div></div>
+        <div class="stat-card"><div class="stat-icon-wrap">💰</div><div class="stat-label">Total Spend</div><div class="stat-val">₹42L</div><div class="stat-change up">↑ 22%</div></div>
+      </div>
+      <div class="card">
+        <div class="card-title">All Clients</div>
+        <div class="client-card">
+          <div class="client-av" style="background:linear-gradient(135deg,#2A3F5F,#F0A500);">AC</div>
+          <div class="client-info"><div class="client-name">Acme Corp</div><div class="client-email">contact@acmecorp.com</div></div>
+          <div class="client-stats"><div class="client-stat"><div class="client-stat-val">8</div><div class="client-stat-label">Campaigns</div></div><div class="client-stat"><div class="client-stat-val">₹4.2L</div><div class="client-stat-label">Spend</div></div></div>
+          <span class="badge badge-green">Active</span>
+        </div>
+        <div class="client-card">
+          <div class="client-av" style="background:linear-gradient(135deg,#60A5FA,#2A3F5F);">TS</div>
+          <div class="client-info"><div class="client-name">TechStart</div><div class="client-email">hello@techstart.io</div></div>
+          <div class="client-stats"><div class="client-stat"><div class="client-stat-val">5</div><div class="client-stat-label">Campaigns</div></div><div class="client-stat"><div class="client-stat-val">₹2.8L</div><div class="client-stat-label">Spend</div></div></div>
+          <span class="badge badge-green">Active</span>
+        </div>
+        <div class="client-card">
+          <div class="client-av" style="background:linear-gradient(135deg,#4ECB71,#0A0E1A);">NX</div>
+          <div class="client-info"><div class="client-name">Nexus Inc</div><div class="client-email">ops@nexusinc.com</div></div>
+          <div class="client-stats"><div class="client-stat"><div class="client-stat-val">3</div><div class="client-stat-label">Campaigns</div></div><div class="client-stat"><div class="client-stat-val">₹1.5L</div><div class="client-stat-label">Spend</div></div></div>
+          <span class="badge badge-yellow">Pending</span>
+        </div>
+        <div class="client-card">
+          <div class="client-av" style="background:linear-gradient(135deg,#FF5C5C,#0A0E1A);">SM</div>
+          <div class="client-info"><div class="client-name">ShopMart</div><div class="client-email">admin@shopmart.in</div></div>
+          <div class="client-stats"><div class="client-stat"><div class="client-stat-val">6</div><div class="client-stat-label">Campaigns</div></div><div class="client-stat"><div class="client-stat-val">₹3.1L</div><div class="client-stat-label">Spend</div></div></div>
+          <span class="badge badge-green">Active</span>
+        </div>
+        <div class="client-card">
+          <div class="client-av" style="background:linear-gradient(135deg,#FFD166,#C67F00);">BZ</div>
+          <div class="client-info"><div class="client-name">BrandZen</div><div class="client-email">team@brandzen.co</div></div>
+          <div class="client-stats"><div class="client-stat"><div class="client-stat-val">2</div><div class="client-stat-label">Campaigns</div></div><div class="client-stat"><div class="client-stat-val">₹80K</div><div class="client-stat-label">Spend</div></div></div>
+          <span class="badge badge-green">Active</span>
+        </div>
+      </div>
+    </div>
+
+    
+    <div class="page-section" id="page-reports">
+      <div class="page-header"><div class="page-title">Reports</div><div class="page-sub">Download and manage campaign performance reports.</div></div>
+      <div class="stats-grid">
+        <div class="stat-card"><div class="stat-icon-wrap">📋</div><div class="stat-label">Total Reports</div><div class="stat-val">84</div><div class="stat-change up">↑ 12 new</div></div>
+        <div class="stat-card"><div class="stat-icon-wrap">🗓</div><div class="stat-label">This Month</div><div class="stat-val">18</div><div class="stat-change up">↑ 6</div></div>
+        <div class="stat-card"><div class="stat-icon-wrap">📥</div><div class="stat-label">Downloads</div><div class="stat-val">342</div><div class="stat-change up">↑ 28%</div></div>
+      </div>
+      <div class="card">
+        <div class="card-title">Recent Reports</div>
+        <div class="report-item"><div class="report-icon">📊</div><div class="report-info"><div class="report-name">Monthly Performance Report — May 2025</div><div class="report-date">Generated May 12, 2025 · All Clients</div></div><span class="report-size">2.4 MB</span><button class="download-btn" onclick="go404()">⬇ Download</button></div>
+        <div class="report-item"><div class="report-icon">🎯</div><div class="report-info"><div class="report-name">Campaign ROI Analysis — Q1 2025</div><div class="report-date">Generated Apr 2, 2025 · Acme Corp</div></div><span class="report-size">1.8 MB</span><button class="download-btn" onclick="go404()">⬇ Download</button></div>
+        <div class="report-item"><div class="report-icon">💰</div><div class="report-info"><div class="report-name">Revenue Summary — April 2025</div><div class="report-date">Generated May 1, 2025 · Finance</div></div><span class="report-size">980 KB</span><button class="download-btn" onclick="go404()">⬇ Download</button></div>
+        <div class="report-item"><div class="report-icon">📈</div><div class="report-info"><div class="report-name">Google Ads Performance — Apr 2025</div><div class="report-date">Generated May 3, 2025 · TechStart</div></div><span class="report-size">1.2 MB</span><button class="download-btn" onclick="go404()">⬇ Download</button></div>
+        <div class="report-item"><div class="report-icon">📱</div><div class="report-info"><div class="report-name">Meta Ads Insights — Apr 2025</div><div class="report-date">Generated May 4, 2025 · ShopMart</div></div><span class="report-size">1.5 MB</span><button class="download-btn" onclick="go404()">⬇ Download</button></div>
+      </div>
+    </div>
+
+    
+    <div class="page-section" id="page-billing">
+      <div class="page-header"><div class="page-title">Billing</div><div class="page-sub">Revenue overview, invoices and payment management.</div></div>
+      <div class="billing-summary">
+        <div class="bill-card"><div class="bill-val">₹12.5L</div><div class="bill-label">Revenue This Month</div></div>
+        <div class="bill-card"><div class="bill-val">₹9.8L</div><div class="bill-label">Collected</div></div>
+        <div class="bill-card"><div class="bill-val">₹2.7L</div><div class="bill-label">Pending</div></div>
+      </div>
+      <div class="card">
+        <div class="card-title">Recent Invoices</div>
+        <div class="invoice-row">
+          <div><div class="invoice-client">Acme Corp</div><div class="invoice-date">INV-2025-0084 · May 1, 2025</div></div>
+          <div style="display:flex;align-items:center;gap:12px;"><span class="invoice-amount">₹1,80,000</span><span class="badge badge-green">Paid</span></div>
+        </div>
+        <div class="invoice-row">
+          <div><div class="invoice-client">TechStart</div><div class="invoice-date">INV-2025-0083 · May 1, 2025</div></div>
+          <div style="display:flex;align-items:center;gap:12px;"><span class="invoice-amount">₹92,000</span><span class="badge badge-yellow">Pending</span></div>
+        </div>
+        <div class="invoice-row">
+          <div><div class="invoice-client">Nexus Inc</div><div class="invoice-date">INV-2025-0082 · Apr 28, 2025</div></div>
+          <div style="display:flex;align-items:center;gap:12px;"><span class="invoice-amount">₹2,40,000</span><span class="badge badge-green">Paid</span></div>
+        </div>
+        <div class="invoice-row">
+          <div><div class="invoice-client">ShopMart</div><div class="invoice-date">INV-2025-0081 · Apr 25, 2025</div></div>
+          <div style="display:flex;align-items:center;gap:12px;"><span class="invoice-amount">₹1,20,000</span><span class="badge badge-red">Overdue</span></div>
+        </div>
+        <div class="invoice-row">
+          <div><div class="invoice-client">BrandZen</div><div class="invoice-date">INV-2025-0080 · Apr 20, 2025</div></div>
+          <div style="display:flex;align-items:center;gap:12px;"><span class="invoice-amount">₹60,000</span><span class="badge badge-green">Paid</span></div>
+        </div>
+      </div>
+    </div>
+
+    
+    <div class="page-section" id="page-admanager">
+      <div class="page-header"><div class="page-title">Ad Manager</div><div class="page-sub">Monitor and control all ad platform integrations.</div></div>
+      <div class="section-grid three-col">
+        <div class="platform-card">
+          <div class="platform-header"><div class="platform-icon" style="background:rgba(66,133,244,0.1);">🔵</div><div><div class="platform-name">Google Ads</div><div class="platform-status">● Connected</div></div></div>
+          <div class="platform-stat"><span class="platform-stat-label">Active Campaigns</span><span class="platform-stat-val">72</span></div>
+          <div class="platform-stat"><span class="platform-stat-label">Monthly Spend</span><span class="platform-stat-val">₹6.8L</span></div>
+          <div class="platform-stat"><span class="platform-stat-label">CTR</span><span class="platform-stat-val">4.8%</span></div>
+          <div class="platform-stat"><span class="platform-stat-label">Conversions</span><span class="platform-stat-val">2,140</span></div>
+        </div>
+        <div class="platform-card">
+          <div class="platform-header"><div class="platform-icon" style="background:rgba(24,119,242,0.1);">📘</div><div><div class="platform-name">Meta / Instagram</div><div class="platform-status">● Connected</div></div></div>
+          <div class="platform-stat"><span class="platform-stat-label">Active Campaigns</span><span class="platform-stat-val">38</span></div>
+          <div class="platform-stat"><span class="platform-stat-label">Monthly Spend</span><span class="platform-stat-val">₹3.7L</span></div>
+          <div class="platform-stat"><span class="platform-stat-label">CTR</span><span class="platform-stat-val">3.2%</span></div>
+          <div class="platform-stat"><span class="platform-stat-label">Reach</span><span class="platform-stat-val">8.4M</span></div>
+        </div>
+        <div class="platform-card">
+          <div class="platform-header"><div class="platform-icon" style="background:rgba(255,0,0,0.1);">▶️</div><div><div class="platform-name">YouTube Ads</div><div class="platform-status" style="color:var(--smoke);">○ Idle</div></div></div>
+          <div class="platform-stat"><span class="platform-stat-label">Active Campaigns</span><span class="platform-stat-val">17</span></div>
+          <div class="platform-stat"><span class="platform-stat-label">Monthly Spend</span><span class="platform-stat-val">₹1.9L</span></div>
+          <div class="platform-stat"><span class="platform-stat-label">Views</span><span class="platform-stat-val">2.1M</span></div>
+          <div class="platform-stat"><span class="platform-stat-label">VTR</span><span class="platform-stat-val">64%</span></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">A/B Test Results</div>
+        <div class="table-wrap">
+          <table><thead><tr><th>Campaign</th><th>Variant A CTR</th><th>Variant B CTR</th><th>Winner</th><th>Confidence</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Summer Sale Headline</strong></td><td style="color:var(--smoke);">4.2%</td><td style="color:var(--white);font-weight:600;">5.8%</td><td><span class="badge badge-green">B Wins</span></td><td style="color:var(--smoke);">97%</td></tr>
+            <tr><td><strong>Brand Awareness CTA</strong></td><td style="color:var(--white);font-weight:600;">3.9%</td><td style="color:var(--smoke);">3.1%</td><td><span class="badge badge-blue">A Wins</span></td><td style="color:var(--smoke);">88%</td></tr>
+            <tr><td><strong>Product Launch Banner</strong></td><td style="color:var(--smoke);">2.8%</td><td style="color:var(--smoke);">2.9%</td><td><span class="badge badge-yellow">Ongoing</span></td><td style="color:var(--smoke);">52%</td></tr>
+          </tbody></table>
+        </div>
+      </div>
+    </div>
+
+    
+    <div class="page-section" id="page-notifications">
+      <div class="page-header"><div class="page-title">Notifications</div><div class="page-sub">Stay updated with all platform activity and alerts.</div></div>
+      <div class="card">
+        <div class="card-title">Recent Notifications <span style="font-family:'Outfit',sans-serif;font-size:11px;font-weight:700;background:rgba(240,165,0,0.12);color:var(--gold);padding:3px 10px;border-radius:999px;margin-left:8px;">8 New</span></div>
+        <div class="notif-item"><div class="notif-icon" style="background:rgba(78,203,113,0.1);">🚀</div><div class="notif-body"><div class="notif-title">Campaign Launched: Summer Sale 2025</div><div class="notif-desc">Acme Corp's campaign went live with ₹80,000 budget on Google Ads. Expected impressions: 4,00,000.</div><div class="notif-time">2 hours ago</div></div><div class="notif-dot"></div></div>
+        <div class="notif-item"><div class="notif-icon" style="background:rgba(240,165,0,0.1);">💰</div><div class="notif-body"><div class="notif-title">Invoice Paid — TechStart</div><div class="notif-desc">Payment of ₹92,000 received for invoice INV-2025-0083.</div><div class="notif-time">5 hours ago</div></div><div class="notif-dot"></div></div>
+        <div class="notif-item"><div class="notif-icon" style="background:rgba(96,165,250,0.1);">👥</div><div class="notif-body"><div class="notif-title">New Client Onboarded: BrandZen</div><div class="notif-desc">BrandZen has completed onboarding and connected their ad accounts.</div><div class="notif-time">Yesterday</div></div><div class="notif-dot"></div></div>
+        <div class="notif-item"><div class="notif-icon" style="background:rgba(255,92,92,0.1);">⚠️</div><div class="notif-body"><div class="notif-title">Budget Alert: Nexus Inc</div><div class="notif-desc">NexFlow campaign has used 80% of its monthly budget. Review and top-up if needed.</div><div class="notif-time">2 days ago</div></div></div>
+        <div class="notif-item"><div class="notif-icon" style="background:rgba(78,203,113,0.1);">📊</div><div class="notif-body"><div class="notif-title">Monthly Report Ready</div><div class="notif-desc">May 2025 performance report has been generated for all clients.</div><div class="notif-time">3 days ago</div></div></div>
+        <div class="notif-item"><div class="notif-icon" style="background:rgba(255,209,102,0.1);">🎯</div><div class="notif-body"><div class="notif-title">A/B Test Concluded — Summer Sale</div><div class="notif-desc">Variant B won with 97% confidence. CTR improved by 1.6%. Switch to winning variant.</div><div class="notif-time">4 days ago</div></div></div>
+      </div>
+    </div>
+
+    
+    <div class="page-section" id="page-profile">
+      <div class="page-header"><div class="page-title">Profile</div><div class="page-sub">Manage your personal details and account information.</div></div>
+      <div class="profile-hero">
+        <div class="profile-av-big" id="profile-initials">A</div>
+        <div>
+          <div class="profile-name" id="profile-name-display">Admin User</div>
+          <div style="font-size:12px;color:var(--smoke);margin-bottom:8px;" id="profile-email-display">admin@stackly.com</div>
+          <div class="profile-role-badge">🛡 Admin Account</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">Personal Information</div>
+        <div class="form-row-2">
+          <div class="form-field"><label>First Name</label><input type="text" placeholder="John" id="fname"/></div>
+          <div class="form-field"><label>Last Name</label><input type="text" placeholder="Doe" id="lname"/></div>
+        </div>
+        <div class="form-field"><label>Email Address</label><input type="email" placeholder="admin@stackly.com" id="pemail"/></div>
+        <div class="form-field"><label>Phone Number</label><input type="tel" id="phone-field" placeholder="+91 98765 43210"/></div>
+        <div class="form-field"><label>Role</label><select><option>Admin</option><option>Super Admin</option></select></div>
+        <div class="form-field"><label>Timezone</label><select><option>Asia/Kolkata (IST)</option><option>America/New_York</option><option>Europe/London</option></select></div>
+        <div style="margin-top:8px;"><button class="action-btn action-btn-primary" onclick="saveProfile()">Save Changes</button></div>
+      </div>
+      <div class="card">
+        <div class="card-title">Change Password</div>
+        <div class="form-field"><label>Current Password</label><input type="password" placeholder="Enter current password"/></div>
+        <div class="form-row-2">
+          <div class="form-field"><label>New Password</label><input type="password" placeholder="Min 6 characters"/></div>
+          <div class="form-field"><label>Confirm New Password</label><input type="password" placeholder="Re-enter new password"/></div>
+        </div>
+        <button class="action-btn action-btn-outline" onclick="go404()">Update Password</button>
+      </div>
+    </div>
+
+    
+    <div class="page-section" id="page-settings">
+      <div class="page-header"><div class="page-title">Settings</div><div class="page-sub">Configure your platform preferences and notifications.</div></div>
+      <div class="card">
+        <div class="card-title">Notification Preferences</div>
+        <div class="settings-item"><div><div class="settings-label">Campaign Alerts</div><div class="settings-desc">Get notified when campaigns go live, pause or complete</div></div><label class="toggle"><input type="checkbox" checked/><div class="toggle-slider"></div></label></div>
+        <div class="settings-item"><div><div class="settings-label">Budget Warnings</div><div class="settings-desc">Alert when campaign budget exceeds 80%</div></div><label class="toggle"><input type="checkbox" checked/><div class="toggle-slider"></div></label></div>
+        <div class="settings-item"><div><div class="settings-label">New Client Notifications</div><div class="settings-desc">Get notified when a new client is onboarded</div></div><label class="toggle"><input type="checkbox" checked/><div class="toggle-slider"></div></label></div>
+        <div class="settings-item"><div><div class="settings-label">Report Generation</div><div class="settings-desc">Email when monthly reports are ready</div></div><label class="toggle"><input type="checkbox"/><div class="toggle-slider"></div></label></div>
+        <div class="settings-item"><div><div class="settings-label">Payment Alerts</div><div class="settings-desc">Notify on invoice payments and overdue bills</div></div><label class="toggle"><input type="checkbox" checked/><div class="toggle-slider"></div></label></div>
+      </div>
+      <div class="card">
+        <div class="card-title">Platform Preferences</div>
+        <div class="settings-item"><div><div class="settings-label">Dark Mode</div><div class="settings-desc">Always use dark theme (enabled by default)</div></div><label class="toggle"><input type="checkbox" checked/><div class="toggle-slider"></div></label></div>
+        <div class="settings-item"><div><div class="settings-label">Auto-generate Reports</div><div class="settings-desc">Automatically create monthly performance reports</div></div><label class="toggle"><input type="checkbox" checked/><div class="toggle-slider"></div></label></div>
+        <div class="settings-item"><div><div class="settings-label">Two-Factor Authentication</div><div class="settings-desc">Add extra security to your admin account</div></div><label class="toggle"><input type="checkbox"/><div class="toggle-slider"></div></label></div>
+        <div class="settings-item"><div><div class="settings-label">Analytics Data Sharing</div><div class="settings-desc">Share anonymised data to improve Stackly</div></div><label class="toggle"><input type="checkbox"/><div class="toggle-slider"></div></label></div>
+      </div>
+    </div>
+
+    
+    <div class="page-section" id="page-teamaccess">
+      <div class="page-header-row">
+        <div class="page-header"><div class="page-title">Team Access</div><div class="page-sub">Manage your team members and their permissions.</div></div>
+        <div><button class="action-btn action-btn-primary" onclick="go404()">+ Invite Member</button></div>
+      </div>
+      <div class="card">
+        <div class="card-title">Team Members</div>
+        <div class="team-member"><div class="team-av" style="background:linear-gradient(135deg,var(--gold),var(--gold-dark));color:var(--ink);">RA</div><div class="team-info"><div class="team-name">Rajan Agarwal</div><div class="team-email">rajan@stackly.com</div></div><span class="badge badge-blue">Super Admin</span><div class="team-actions"><button class="rbtn" onclick="go404()">Edit</button><button class="rbtn danger" onclick="go404()">Remove</button></div></div>
+        <div class="team-member"><div class="team-av" style="background:linear-gradient(135deg,#60A5FA,#2A3F5F);">PK</div><div class="team-info"><div class="team-name">Priya Krishnan</div><div class="team-email">priya@stackly.com</div></div><span class="badge badge-green">Account Manager</span><div class="team-actions"><button class="rbtn" onclick="go404()">Edit</button><button class="rbtn danger" onclick="go404()">Remove</button></div></div>
+        <div class="team-member"><div class="team-av" style="background:linear-gradient(135deg,#4ECB71,#0A0E1A);">SM</div><div class="team-info"><div class="team-name">Siddharth Menon</div><div class="team-email">sid@stackly.com</div></div><span class="badge badge-yellow">Campaign Manager</span><div class="team-actions"><button class="rbtn" onclick="go404()">Edit</button><button class="rbtn danger" onclick="go404()">Remove</button></div></div>
+        <div class="team-member"><div class="team-av" style="background:linear-gradient(135deg,#FF5C5C,#0A0E1A);">DV</div><div class="team-info"><div class="team-name">Divya Venkat</div><div class="team-email">divya@stackly.com</div></div><span class="badge badge-yellow">Analyst</span><div class="team-actions"><button class="rbtn" onclick="go404()">Edit</button><button class="rbtn danger" onclick="go404()">Remove</button></div></div>
+      </div>
+    </div>
+
+    
+    <div class="page-section" id="page-support">
+      <div class="page-header"><div class="page-title">Support</div><div class="page-sub">Find answers or reach out to the Stackly team.</div></div>
+      <div style="display:grid;grid-template-columns:1.6fr 1fr;gap:18px;margin-bottom:18px;" class="responsive-grid">
+        <div class="card">
+          <div class="card-title">Frequently Asked Questions</div>
+          <div class="faq-item" onclick="toggleFaq(this)"><div class="faq-q">How do I add a new client? <span class="faq-toggle">+</span></div><div class="faq-a">Go to the Clients section from the sidebar and click "+ Onboard Client". Fill in the client's details, assign a role, and connect their ad accounts. They'll receive an email invitation to join.</div></div>
+          <div class="faq-item" onclick="toggleFaq(this)"><div class="faq-q">How are reports generated? <span class="faq-toggle">+</span></div><div class="faq-a">Reports are auto-generated on the 1st of every month for all active clients. You can also manually generate reports any time from the Reports section. Reports include impressions, CTR, spend, and ROAS.</div></div>
+          <div class="faq-item" onclick="toggleFaq(this)"><div class="faq-q">How do I pause or stop a campaign? <span class="faq-toggle">+</span></div><div class="faq-a">Navigate to Campaigns, select the campaign you want to pause, and use the status toggle. For Google Ads and Meta, changes sync within minutes. YouTube Ads may take up to 1 hour.</div></div>
+          <div class="faq-item" onclick="toggleFaq(this)"><div class="faq-q">What does CTR mean? <span class="faq-toggle">+</span></div><div class="faq-a">CTR (Click-Through Rate) is the percentage of people who clicked your ad after seeing it. A higher CTR generally means your ad creative and targeting are effective. Industry average is 2–5%.</div></div>
+          <div class="faq-item" onclick="toggleFaq(this)"><div class="faq-q">How do I invite team members? <span class="faq-toggle">+</span></div><div class="faq-a">Go to Team Access from the sidebar and click "+ Invite Member". Enter their email and assign a role. They'll receive an email with login instructions.</div></div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:14px;">
+          <div class="contact-card"><div class="contact-icon">💬</div><div class="contact-title">Live Chat Support</div><div class="contact-desc">Chat with our support team directly. Average response time: 2 minutes.</div><button class="contact-btn" onclick="go404()">Start Chat</button></div>
+          <div class="contact-card"><div class="contact-icon">📧</div><div class="contact-title">Email Support</div><div class="contact-desc">Send us a detailed query. We'll respond within 24 hours on business days.</div><button class="contact-btn" onclick="go404()">Send Email</button></div>
+          <div class="contact-card"><div class="contact-icon">📞</div><div class="contact-title">Call Us</div><div class="contact-desc">Speak directly with our team. Available Mon–Sat, 9 AM – 7 PM IST.</div><button class="contact-btn" onclick="go404()">+91 98765 43210</button></div>
+        </div>
+      </div>
+    </div>
+
   </main>
 </div>
 
 <style>
 @media(max-width:900px){
-  .main [style*="grid-template-columns:1fr 1.6fr"],
-  .main [style*="grid-template-columns:1.4fr 1fr"]{
-    display:block!important;
-  }
-  .main [style*="grid-template-columns:1fr 1.6fr"]>.card,
-  .main [style*="grid-template-columns:1.4fr 1fr"]>.card{
-    margin-bottom:18px;
-  }
+  .responsive-grid{display:block!important;}
+  .responsive-grid>.card{margin-bottom:18px;}
 }
-  .bar-chart{height:220px!important;display:flex;align-items:flex-end;gap:12px;padding:10px 5px 0}
-  .bar-chart .bar{flex:1;min-width:22px;border-radius:6px 6px 0 0}
-  
+.bar-chart{height:220px!important;display:flex;align-items:flex-end;gap:12px;padding:10px 5px 0}
+.bar-chart .bar{flex:1;min-width:22px;border-radius:6px 6px 0 0}
 </style>
 
 <script>
+// Auth check
 (function(){
   const s=JSON.parse(localStorage.getItem('stackly_session')||'null');
-  if(!s||s.role!=='admin'){window.location.href='login.html';return;}
+  if(!s||s.role!=='admin'){window.location.href='index.html';return;}
   document.getElementById('nav-email').textContent=s.email||'';
   if(s.name){
     document.getElementById('nav-name').textContent=s.name;
+    const parts=s.name.trim().split(' ');
+    const initials=(parts[0][0]+(parts[1]?parts[1][0]:'')).toUpperCase();
+    document.getElementById('profile-initials').textContent=initials;
+    document.getElementById('profile-name-display').textContent=s.name;
+    document.getElementById('profile-email-display').textContent=s.email||'';
+    const np=s.name.split(' ');
+    if(document.getElementById('fname')) document.getElementById('fname').value=np[0]||'';
+    if(document.getElementById('lname')) document.getElementById('lname').value=np[1]||'';
+    if(document.getElementById('pemail')) document.getElementById('pemail').value=s.email||'';
   }
 })();
+
 function logout(){localStorage.removeItem('stackly_session');window.location.href='index.html';}
+function go404(){window.location.href='404.html';}
+
 function toggleSidebar(){
   document.getElementById('sidebar').classList.toggle('open');
   document.getElementById('overlay').classList.toggle('open');
 }
+
+function showPage(id, el){
+  // Close sidebar on mobile
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('overlay').classList.remove('open');
+  // Hide all pages
+  document.querySelectorAll('.page-section').forEach(p=>p.classList.remove('active'));
+  // Show target
+  document.getElementById('page-'+id).classList.add('active');
+  // Update sidebar active state
+  document.querySelectorAll('.sidebar-item').forEach(i=>i.classList.remove('active'));
+  if(el) el.classList.add('active');
+  // Scroll to top
+  window.scrollTo({top:0,behavior:'smooth'});
+  // Animate progress bars + reveal elements
+  setTimeout(()=>{
+    document.querySelectorAll('#page-'+id+' .progress-fill').forEach(b=>{
+      const w=b.style.width;b.style.width='0';setTimeout(()=>{b.style.width=w;},50);
+    });
+    document.querySelectorAll('#page-'+id+' .cp-fill').forEach(b=>{
+      const w=b.style.width;b.style.width='0';setTimeout(()=>{b.style.width=w;},50);
+    });
+    // Trigger reveal for newly shown page
+    document.querySelectorAll('#page-'+id+' .reveal,#page-'+id+' .reveal-left,#page-'+id+' .reveal-right').forEach((el,i)=>{
+      el.classList.remove('visible');
+      setTimeout(()=>el.classList.add('visible'),i*55+100);
+    });
+  },50);
+  return false;
+}
+
+function toggleFaq(el){
+  el.classList.toggle('open');
+}
+
+function showFieldError(id,msg){
+  const el=document.getElementById(id);
+  if(!el)return;
+  el.style.borderColor='var(--red)';
+  let err=el.parentNode.querySelector('.field-err');
+  if(!err){err=document.createElement('div');err.className='field-err';err.style.cssText='font-size:11px;color:var(--red);margin-top:4px;';el.parentNode.appendChild(err);}
+  err.textContent=msg;
+}
+function clearFieldError(id){
+  const el=document.getElementById(id);
+  if(!el)return;
+  el.style.borderColor='';
+  const err=el.parentNode.querySelector('.field-err');
+  if(err)err.remove();
+}
+function saveProfile(){
+  const s=JSON.parse(localStorage.getItem('stackly_session')||'{}');
+  const fn=document.getElementById('fname').value.trim();
+  const ln=document.getElementById('lname').value.trim();
+  const em=document.getElementById('pemail').value.trim();
+
+  // Get phone input (3rd input in profile card)
+  const phoneEl=document.querySelector('#page-profile .card input[type="tel"]');
+  const phone=phoneEl?phoneEl.value.trim():'';
+
+  let valid=true;
+
+  // First name: letters + spaces only
+  if(!fn){showFieldError('fname','First name is required.');valid=false;}
+  else if(!/^[A-Za-z\s]+$/.test(fn)){showFieldError('fname','Name must contain letters only — no numbers or special characters.');valid=false;}
+  else clearFieldError('fname');
+
+  // Last name: letters + spaces only (optional but if filled must be valid)
+  if(ln && !/^[A-Za-z\s]+$/.test(ln)){showFieldError('lname','Name must contain letters only — no numbers or special characters.');valid=false;}
+  else clearFieldError('lname');
+
+  // Email: must have @ and end with .com / .in / etc.
+  if(!em){showFieldError('pemail','Email address is required.');valid=false;}
+  else if(!/^[^\s@]+@[^\s@]+\.[a-zA-Z]{2,}$/.test(em)){showFieldError('pemail','Enter a valid email address (e.g. name@example.com).');valid=false;}
+  else clearFieldError('pemail');
+
+  // Phone: exactly 10 digits
+  const phoneDigits=phone.replace(/\D/g,'');
+  if(phoneEl){
+    if(!phone){showFieldError('phone-field','Phone number is required.');valid=false;}
+    else if(phoneDigits.length!==10){showFieldError('phone-field','Mobile number must be exactly 10 digits.');valid=false;}
+    else clearFieldError('phone-field');
+  }
+
+  if(!valid)return;
+
+  const name=(fn+' '+ln).trim();
+  s.name=name;s.email=em;
+  localStorage.setItem('stackly_session',JSON.stringify(s));
+  document.getElementById('nav-name').textContent=s.name;
+  document.getElementById('profile-name-display').textContent=s.name;
+  document.getElementById('profile-email-display').textContent=s.email;
+  alert('Profile saved!');
+}
+
 window.addEventListener('load',()=>{
   document.querySelectorAll('.progress-fill').forEach(b=>{
     const w=b.style.width;b.style.width='0';setTimeout(()=>{b.style.width=w;},400);
   });
+  initScrollReveal();
+  initScrollProgress();
 });
+
+function initScrollProgress(){
+  const bar=document.getElementById('scrollBar');
+  if(!bar)return;
+  window.addEventListener('scroll',()=>{
+    const nav=document.querySelector('.topnav');
+    if(nav) nav.classList.toggle('scrolled',window.scrollY>10);
+    const scrollTop=window.scrollY||document.documentElement.scrollTop;
+    const docH=document.documentElement.scrollHeight-window.innerHeight;
+    bar.style.width=docH>0?(scrollTop/docH*100)+'%':'0%';
+  });
+}
+
+function initScrollReveal(){
+  // Add reveal classes to cards and sections
+  document.querySelectorAll('.stat-card').forEach(el=>el.classList.add('reveal'));
+  document.querySelectorAll('.card').forEach(el=>el.classList.add('reveal'));
+  document.querySelectorAll('.campaign-card').forEach(el=>el.classList.add('reveal'));
+  document.querySelectorAll('.client-card').forEach(el=>el.classList.add('reveal'));
+  document.querySelectorAll('.report-item').forEach(el=>el.classList.add('reveal'));
+  document.querySelectorAll('.team-member').forEach(el=>el.classList.add('reveal'));
+  document.querySelectorAll('.platform-card').forEach(el=>el.classList.add('reveal'));
+  document.querySelectorAll('.bill-card').forEach(el=>el.classList.add('reveal'));
+  document.querySelectorAll('.notif-item').forEach(el=>el.classList.add('reveal'));
+  
+  const io=new IntersectionObserver((entries)=>{
+    entries.forEach((e,i)=>{
+      if(e.isIntersecting){
+        setTimeout(()=>e.target.classList.add('visible'),i*40);
+      }
+    });
+  },{threshold:0.08,rootMargin:'0px 0px -30px 0px'});
+  document.querySelectorAll('.reveal,.reveal-left,.reveal-right').forEach(el=>io.observe(el));
+}
+
 </script>
 </body>
 </html>

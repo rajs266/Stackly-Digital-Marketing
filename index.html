@@ -203,36 +203,32 @@ body{
 .field-error input,.field-error select{border-color:var(--error)!important;}
 
 
-.alert-banner{
-  display:none;
-  margin-bottom:18px;
-  padding:14px 16px;
-  border-radius:10px;
-  border:1.5px solid rgba(255,92,92,0.35);
-  background:rgba(255,92,92,0.07);
-}
-.alert-banner.show{display:flex;align-items:flex-start;gap:12px;animation:fadeSlide .35s ease both;}
-.alert-icon{font-size:18px;flex-shrink:0;margin-top:1px;}
-.alert-title{font-size:13px;font-weight:700;color:#FF5C5C;margin-bottom:3px;}
-.alert-desc{font-size:12px;color:var(--smoke);line-height:1.6;}
-.alert-desc a{color:var(--gold);font-weight:600;text-decoration:none;}
-.alert-desc a:hover{text-decoration:underline;}
-@keyframes fadeSlide{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
-
-
 @media(max-width:900px){
   .left-panel{display:none;}
   .right-panel{width:100%;border-left:none;padding:40px 28px;}
+  .split{flex-direction:column;}
 }
 @media(max-width:480px){
   .right-panel{padding:32px 20px;}
   .social-btns{flex-direction:column;}
+  .form-box{max-width:100%;padding:0 4px;}
+  .form-header h3{font-size:1.7rem;}
+  .form-group input,.form-group select{padding:12px 14px;font-size:15px;}
+  .btn-submit{padding:14px;font-size:15px;}
+  .form-row{flex-direction:column;align-items:flex-start;gap:10px;}
+  .form-row a{align-self:flex-end;}
+}
+@media(max-width:360px){
+  .right-panel{padding:24px 16px;}
+  .form-box{padding:0;}
+  .social-btns{gap:8px;}
+  .social-btn{padding:10px 8px;font-size:12px;}
 }
 </style>
 </head>
 <body>
 <div class="split">
-  
+
   <div class="left-panel">
     <div class="left-bg-img"></div>
     <div class="left-bg-overlay"></div>
@@ -261,7 +257,7 @@ body{
     </div>
   </div>
 
-  
+
   <div class="right-panel">
     <div class="form-box">
       <div class="form-header">
@@ -282,29 +278,6 @@ body{
       <div class="divider">or continue with email</div>
 
       <div id="loginForm">
-        
-        <div class="alert-banner" id="alert-not-registered">
-          <div class="alert-icon">⚠️</div>
-          <div class="alert-body">
-            <div class="alert-title">Account not found</div>
-            <div class="alert-desc">
-              No account is registered with this email address.<br>
-              <a href="signup.html">Create a free account →</a>
-            </div>
-          </div>
-        </div>
-
-        
-        <div class="alert-banner" id="alert-wrong-password">
-          <div class="alert-icon">🔒</div>
-          <div class="alert-body">
-            <div class="alert-title">Incorrect password</div>
-            <div class="alert-desc">
-              The password you entered doesn't match our records.<br>
-              <a href="404.html">Forgot your password?</a>
-            </div>
-          </div>
-        </div>
         <div class="form-group" id="grp-role">
           <label>Role</label>
           <select id="role">
@@ -355,17 +328,14 @@ function togglePw(id,btn){
   if(inp.type==='password'){inp.type='text';btn.textContent='🙈';}
   else{inp.type='password';btn.textContent='👁';}
 }
-function hideAlerts(){
-  document.getElementById('alert-not-registered').classList.remove('show');
-  document.getElementById('alert-wrong-password').classList.remove('show');
-}
+
 function handleLogin(){
   let valid=true;
   const role=document.getElementById('role').value;
   const email=document.getElementById('email').value.trim();
   const password=document.getElementById('password').value;
 
-  hideAlerts();
+  // Reset all field errors and messages
   ['role','email','password'].forEach(f=>{
     document.getElementById('grp-'+f).classList.remove('field-error');
     document.getElementById('err-'+f).classList.remove('show');
@@ -388,30 +358,8 @@ function handleLogin(){
   }
   if(!valid) return;
 
-  const users=JSON.parse(localStorage.getItem('stackly_users')||'[]');
-
-  const emailExists = users.find(u => u.email === email);
-  if(!emailExists){
-    document.getElementById('grp-email').classList.add('field-error');
-    document.getElementById('alert-not-registered').classList.add('show');
-    return;
-  }
-
-  const userWithPassword = users.find(u => u.email === email && u.password === password);
-  if(!userWithPassword){
-    document.getElementById('grp-password').classList.add('field-error');
-    document.getElementById('alert-wrong-password').classList.add('show');
-    return;
-  }
-
-  if(userWithPassword.role !== role){
-    document.getElementById('grp-role').classList.add('field-error');
-    document.getElementById('err-role').textContent = 'This account is registered under a different role.';
-    document.getElementById('err-role').classList.add('show');
-    return;
-  }
-
-  localStorage.setItem('stackly_session', JSON.stringify({name:userWithPassword.name, email:userWithPassword.email, role:userWithPassword.role}));
+  // Store session and redirect based on role
+  localStorage.setItem('stackly_session', JSON.stringify({name: email.split('@')[0], email: email, role: role}));
   if(role==='admin') window.location.href='dashboard-admin.html';
   else window.location.href='dashboard-client.html';
 }
